@@ -1,0 +1,395 @@
+{
+  "locale": "hy",
+  "languageLabel": "HY",
+  "seo": {
+    "title": "AI ավտոմատացում, ծրագրավորում և թվային աճ բիզնեսի համար",
+    "description": "Պրեմիում թվային գործակալություն՝ վեբ և մոբայլ մշակում, AI ավտոմատացում, SEO, գովազդ, Telegram բոտեր, DevOps և բիզնեսի աճի համակարգեր։",
+    "keywords": [
+      "AI ավտոմատացում",
+      "ծրագրավորման գործակալություն",
+      "վեբ կայքերի մշակում",
+      "մոբայլ հավելվածների մշակում",
+      "SEO ծառայություններ",
+      "Telegram բոտեր",
+      "DevOps",
+      "բիզնեսի աճ"
+    ]
+  },
+  "nav": {
+    "benefits": "Առավելություններ",
+    "services": "Ծառայություններ",
+    "process": "Գործընթաց",
+    "contact": "Կապ",
+    "start": "Սկսել",
+    "menu": "Մենյու",
+    "close": "Փակել"
+  },
+  "processStepWord": "Քայլ",
+  "hero": {
+    "eyebrow": "AI, ծրագրավորում, ավտոմատացում, աճ",
+    "titleBefore": "Կառուցեք խելացի",
+    "titleHighlight": "թվային համակարգեր",
+    "titleAfter": "ձեր բիզնեսի համար",
+    "subtitle": "Օգնում ենք բիզնեսներին աճել ժամանակակից ծրագրավորմամբ, AI ավտոմատացմամբ, SEO-ով, գովազդով և մասշտաբավորվող թվային համակարգերով։",
+    "primaryCta": "Ստանալ անվճար խորհրդատվություն",
+    "secondaryCta": "Դիտել ծառայությունները",
+    "stats": [
+      [
+        "AI",
+        "ավտոմատացում առաջինը"
+      ],
+      [
+        "360",
+        "թվային աճ"
+      ],
+      [
+        "24/7",
+        "աջակցման համակարգեր"
+      ]
+    ],
+    "dashboardTitle": "Բիզնեսի կառավարման կենտրոն",
+    "dashboardEyebrow": "Growth OS",
+    "live": "Ուղիղ",
+    "dashboardStats": [
+      [
+        "Հարցումներ",
+        "+37%",
+        "SEO-ից"
+      ],
+      [
+        "Ավտոմատացում",
+        "18.4ժ",
+        "խնայված շաբաթական"
+      ],
+      [
+        "Եկամուտ",
+        "+$86k",
+        "pipeline"
+      ]
+    ],
+    "acquisition": "Հաճախորդների ներգրավում",
+    "aiRouting": "AI ուղղորդում",
+    "botFlow": "Բոտի հոսք",
+    "botFlowDescription": "Հարցումը ստացվեց, որակավորվեց և փոխանցվեց CRM։",
+    "launchReady": "Պատրաստ է գործարկման",
+    "ciHealthy": "CI/CD առողջ է"
+  },
+  "sections": {
+    "benefits": {
+      "eyebrow": "Ինչու են բիզնեսները աշխատում մեզ հետ",
+      "title": "Ինչու են բիզնեսները ընտրում մեզ",
+      "description": "Մենք միավորում ենք ռազմավարական հստակությունը, senior մակարդակի իրականացումը և խելացի համակարգերը՝ ստեղծելով երկարաժամկետ աճող թվային էկոհամակարգեր։"
+    },
+    "services": {
+      "eyebrow": "Թվային էկոհամակարգի ծառայություններ",
+      "title": "Լիարժեք աճի համակարգ",
+      "description": "Պրոդուկտի ճարտարապետությունից մինչև AI ավտոմատացում, գովազդ, SEO և ենթակառուցվածքներ՝ ամեն ծառայություն ուժեղացնում է բիզնեսը։"
+    },
+    "technologies": {
+      "eyebrow": "Տեխնոլոգիաներ",
+      "title": "Ժամանակակից գործիքներ մասշտաբավորման համար",
+      "description": "Ընտրում ենք փորձված տեխնոլոգիաներ, որպեսզի պրոդուկտները լինեն արագ, կայուն, վերահսկելի և պատրաստ աճի հաջորդ փուլին։"
+    },
+    "process": {
+      "eyebrow": "Ինչպես ենք կառուցում",
+      "title": "Ռազմավարությունից մինչև մասշտաբավորվող աճ",
+      "description": "Հստակ գործընթացը պահում է որակը բարձր, աշխատանքը տեսանելի, իսկ արդյունքը՝ չափելի առաջին զրույցից մինչև launch և օպտիմիզացում։"
+    },
+    "showcase": {
+      "eyebrow": "Արդյունքներ և օրինակներ",
+      "title": "Պրեմիում տեսք ունեցող և իրական աշխատող համակարգեր",
+      "description": "Յուրաքանչյուր լուծում դառնում է ավելի լայն բիզնես շարժիչի մաս՝ չափելի, ավտոմատացված, ինտեգրված և մասշտաբավորվող։"
+    },
+    "contact": {
+      "eyebrow": "Սկսենք խոսակցությունը",
+      "title": "Պատմեք՝ ինչ եք ուզում կառուցել",
+      "description": "Կիսվեք ձեր նպատակներով, և մենք կնախագծենք լավագույն ճանապարհը պրոդուկտի, ծրագրավորման, AI ավտոմատացման, մարքեթինգի և ենթակառուցվածքների համար։"
+    }
+  },
+  "benefits": [
+    {
+      "title": "Senior մակարդակի ծրագրավորում",
+      "description": "Ճարտարապետություն, մշակում և առաքում՝ enterprise պրոդուկտ թիմերի կարգապահությամբ։",
+      "icon": "code2"
+    },
+    {
+      "title": "AI-ով աշխատող ավտոմատացում",
+      "description": "Գործակալներ, workflow-ներ և ներքին գործիքներ, որոնք կրճատում են ձեռքով աշխատանքը։",
+      "icon": "brainCircuit"
+    },
+    {
+      "title": "Ամբողջական թվային լուծումներ",
+      "description": "Ռազմավարություն, պրոդուկտ, ծրագրավորում, SEO, գովազդ և ավտոմատացում մեկ համակարգում։",
+      "icon": "layers3"
+    },
+    {
+      "title": "Մասշտաբավորվող ենթակառուցվածք",
+      "description": "Cloud-ready հարթակներ, CI/CD, observability և deployment համակարգեր աճի համար։",
+      "icon": "serverCog"
+    },
+    {
+      "title": "SEO և մարքեթինգ",
+      "description": "Տեսանելիության համակարգեր՝ որոնման, վճարովի ներգրավման և conversion ռազմավարության միջոցով։",
+      "icon": "chartNoAxesCombined"
+    },
+    {
+      "title": "Արագ կապ և աջակցություն",
+      "description": "Թափանցիկ աշխատանք, արագ feedback և վստահելի աջակցություն գործարկումից հետո։",
+      "icon": "lifeBuoy"
+    }
+  ],
+  "services": [
+    {
+      "title": "Վեբ մշակում",
+      "description": "Արագ կայքեր, SaaS հարթակներ, dashboard-ներ և conversion-focused վեբ հավելվածներ։",
+      "icon": "globe2"
+    },
+    {
+      "title": "Մոբայլ հավելվածներ",
+      "description": "Պրեմիում iOS, Android և React Native փորձառություններ՝ ամենօրյա օգտագործման համար։",
+      "icon": "smartphone"
+    },
+    {
+      "title": "AI լուծումներ",
+      "description": "AI assistant-ներ, տվյալների workflow-ներ, խելացի որոնում, content համակարգեր և agentic tools։",
+      "icon": "brainCircuit"
+    },
+    {
+      "title": "Telegram բոտեր",
+      "description": "Վաճառքի, աջակցության, booking-ի, CRM-ի և ավտոմատացման բոտեր ձեր բիզնես լոգիկայով։",
+      "icon": "bot"
+    },
+    {
+      "title": "Ավտոմատացման համակարգեր",
+      "description": "Գործառնական pipeline-ներ՝ վաճառք, աջակցություն, մարքեթինգ, ֆինանսներ և թիմեր կապելու համար։",
+      "icon": "workflow"
+    },
+    {
+      "title": "SEO օպտիմիզացում",
+      "description": "Տեխնիկական SEO, content architecture, analytics և growth loops օրգանական տեսանելիության համար։",
+      "icon": "search"
+    },
+    {
+      "title": "Google Ads և Meta Ads",
+      "description": "Վճարովի ներգրավման համակարգեր՝ positioning, tracking, landing pages և շարունակական բարելավում։",
+      "icon": "megaphone"
+    },
+    {
+      "title": "Infrastructure և DevOps",
+      "description": "Docker, CI/CD, cloud systems, monitoring, հուսալիություն և ծախսերի գիտակցված մասշտաբավորում։",
+      "icon": "cloudCog"
+    },
+    {
+      "title": "Բիզնես խորհրդատվություն",
+      "description": "Թվային ռազմավարություն, product roadmap-ներ, ավտոմատացման հնարավորություններ և աճի պլան։",
+      "icon": "rocket"
+    }
+  ],
+  "techGroups": [
+    {
+      "label": "Frontend",
+      "items": [
+        "React",
+        "Next.js",
+        "TypeScript"
+      ],
+      "icon": "mousePointer2"
+    },
+    {
+      "label": "Backend",
+      "items": [
+        "Node.js",
+        "NestJS",
+        "Express"
+      ],
+      "icon": "network"
+    },
+    {
+      "label": "Mobile",
+      "items": [
+        "React Native",
+        "iOS",
+        "Android"
+      ],
+      "icon": "smartphone"
+    },
+    {
+      "label": "Infrastructure",
+      "items": [
+        "Docker",
+        "CI/CD",
+        "Cloud Systems"
+      ],
+      "icon": "serverCog"
+    },
+    {
+      "label": "AI",
+      "items": [
+        "OpenAI",
+        "AI Agents",
+        "Automation"
+      ],
+      "icon": "sparkles"
+    },
+    {
+      "label": "Marketing",
+      "items": [
+        "SEO",
+        "Google Ads",
+        "Meta Ads"
+      ],
+      "icon": "gauge"
+    }
+  ],
+  "processSteps": [
+    {
+      "title": "Հետազոտություն և ռազմավարություն",
+      "description": "Պարզում ենք բիզնես նպատակները, լսարանի intent-ը, bottleneck-ները և աճի հնարավորությունները։",
+      "icon": "search"
+    },
+    {
+      "title": "Դիզայն և պլանավորում",
+      "description": "Ձևավորում ենք փորձառությունը, տեխնիկական ճարտարապետությունը, ինտեգրացիաները և չափանիշները։",
+      "icon": "milestone"
+    },
+    {
+      "title": "Մշակում",
+      "description": "Կառուցում ենք արագ և մասշտաբավորվող պրոդուկտներ՝ մաքուր կոդով և պրեմիում UI մանրամասներով։",
+      "icon": "code2"
+    },
+    {
+      "title": "AI և ավտոմատացման ինտեգրում",
+      "description": "Միացնում ենք AI, բոտեր, workflow-ներ և ներքին գործիքներ՝ գործառնությունները հեշտացնելու համար։",
+      "icon": "zap"
+    },
+    {
+      "title": "Գործարկում և մասշտաբավորում",
+      "description": "Deploy, չափում, օպտիմիզացում և շարունակական բարելավում պահանջարկի աճին զուգահեռ։",
+      "icon": "rocket"
+    }
+  ],
+  "showcase": [
+    {
+      "title": "AI ավտոմատացման համակարգեր",
+      "description": "Agent workflow-ներ, որոնք որակավորում են lead-երը, ամփոփում խոսակցությունները և ստեղծում tasks։",
+      "metric": "42%",
+      "metricLabel": "քիչ manual աշխատանք",
+      "icon": "activity"
+    },
+    {
+      "title": "Բիզնես հարթակներ",
+      "description": "Customer portals, ներքին OS, booking flows և revenue dashboards։",
+      "metric": "3.8x",
+      "metricLabel": "արագ գործառնություններ",
+      "icon": "shieldCheck"
+    },
+    {
+      "title": "Telegram բոտեր",
+      "description": "Վաճառք, աջակցություն, ծանուցումներ, վճարումներ և CRM-connected բոտեր։",
+      "metric": "24/7",
+      "metricLabel": "ավտոմատ աջակցություն",
+      "icon": "messageCircle"
+    },
+    {
+      "title": "Մարքեթինգ համակարգեր",
+      "description": "Landing pages, tracking, SEO ենթակառուցվածք, paid campaigns և attribution dashboards։",
+      "metric": "+68%",
+      "metricLabel": "lead quality աճ",
+      "icon": "megaphone"
+    },
+    {
+      "title": "CRM և ներքին dashboard-ներ",
+      "description": "Role-based analytics, pipeline visibility, ավտոմատացումներ և թիմային command centers։",
+      "metric": "1 աղբյուր",
+      "metricLabel": "ճշմարտության",
+      "icon": "chartNoAxesCombined"
+    }
+  ],
+  "showcasePanel": {
+    "eyebrow": "Միացված համակարգ",
+    "title": "Մեկ միացված գործառնական շերտ աճի համար։",
+    "description": "Միացնում ենք պրոդուկտը, մարքեթինգը, AI-ը, ավտոմատացումը, analytics-ը և ենթակառուցվածքը, որպեսզի ձեր թվային ներկայությունը աշխատի որպես մեկ խելացի համակարգ։",
+    "health": "Համակարգի վիճակ",
+    "optimized": "Օպտիմիզացված",
+    "items": [
+      "Lead generation",
+      "AI qualification",
+      "CRM sync",
+      "Retargeting",
+      "Cloud deployment"
+    ]
+  },
+  "contact": {
+    "cards": [
+      {
+        "title": "Telegram",
+        "value": "@adlog",
+        "href": "https://t.me/adlog",
+        "icon": "messageCircle"
+      },
+      {
+        "title": "Էլ. փոստ",
+        "value": "adlog.agency@gmail.com",
+        "href": "mailto:adlog.agency@gmail.com",
+        "icon": "mail"
+      },
+      {
+        "title": "Պատասխան",
+        "value": "Սովորաբար 24 ժամում",
+        "href": "#contact",
+        "icon": "clock3"
+      },
+      {
+        "title": "Աշխատանք",
+        "value": "Ռազմավարություն, մշակում, retainer, scaling",
+        "href": "#contact",
+        "icon": "circleDollarSign"
+      }
+    ],
+    "trustEyebrow": "Վստահության նշան",
+    "trustText": "Ռազմավարությունից սկսվող մշակում՝ չափելի բիզնես արդյունքներով։",
+    "fields": {
+      "fullName": "Անուն Ազգանուն",
+      "companyName": "Ընկերության անուն",
+      "email": "Էլ. փոստ",
+      "phoneTelegram": "Հեռախոս / Telegram",
+      "servicesInterested": "Հետաքրքրող ծառայություններ",
+      "projectDescription": "Նախագծի նկարագրություն",
+      "estimatedBudget": "Մոտավոր բյուջե",
+      "timeline": "Ժամկետ"
+    },
+    "servicePlaceholder": "Ընտրեք ծառայությունը",
+    "selectPlaceholder": "Ընտրեք տարբերակ",
+    "budgetOptions": [
+      "Մինչև $5k",
+      "$5k - $15k",
+      "$15k - $50k",
+      "$50k+"
+    ],
+    "timelineOptions": [
+      "Շտապ",
+      "2-4 շաբաթ",
+      "1-3 ամիս",
+      "Ճկուն"
+    ],
+    "primaryButton": "Ստանալ անվճար խորհրդատվություն",
+    "secondaryButton": "Պլանավորել զանգ",
+    "sending": "Ուղարկվում է...",
+    "success": "Հաղորդագրությունը ստացվեց։ Մենք ձեզ հաստատման նամակ ուղարկեցինք և շուտով կպատասխանենք։",
+    "error": "Ինչ-որ բան սխալ է։ Խնդրում ենք փորձել կրկին կամ կապվել էլ. փոստով։",
+    "validation": {
+      "fullName": "Խնդրում ենք լրացնել անունը։",
+      "email": "Խնդրում ենք լրացնել ճիշտ էլ. փոստ։",
+      "projectDescription": "Խնդրում ենք մի փոքր պատմել նախագծի մասին։"
+    }
+  },
+  "finalCta": {
+    "heading": "Ավելի շատ տեսանելիություն։ Ավելի շատ հաճախորդներ։ Ավելի շատ աճ։",
+    "subtitle": "Մենք միավորում ենք ծրագրավորումը, AI-ը, ավտոմատացումը, SEO-ն և մարքեթինգը՝ օգնելով բիզնեսներին աճել արագ և աշխատել խելացի։",
+    "button": "Կառուցել աճի համակարգ"
+  },
+  "footer": {
+    "note": "Մշակված է մեր ներքին թիմի կողմից։",
+    "rights": "Բոլոր իրավունքները պաշտպանված են։"
+  }
+}

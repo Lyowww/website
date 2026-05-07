@@ -14,17 +14,17 @@ export function getStructuredData(locale: Locale) {
       {
         "@type": "Organization",
         "@id": `${siteUrl}/#organization`,
-        name: "Ecosystem Studio",
+        name: "AdLog",
         url: siteUrl,
-        email: "hello@ecosystem.studio",
-        sameAs: ["https://t.me/"],
+        email: "adlog.agency@gmail.com",
+        sameAs: ["https://t.me/adlog"],
         description: content.seo.description
       },
       {
         "@type": "WebSite",
         "@id": `${siteUrl}/#website`,
         url: siteUrl,
-        name: "Ecosystem Studio",
+        name: "AdLog",
         publisher: {
           "@id": `${siteUrl}/#organization`
         },

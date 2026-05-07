@@ -49,8 +49,8 @@ export async function POST(request: Request) {
       timeline: sanitize(payload.timeline) || "-"
     };
 
-    const internalFrom = formatFrom("Ecosystem Studio Website", contactFrom);
-    const visitorFrom = formatFrom("Ecosystem Studio", contactFrom);
+    const internalFrom = formatFrom("AdLog Website", contactFrom);
+    const visitorFrom = formatFrom("AdLog", contactFrom);
 
     const { error: teamError } = await resend.emails.send({
       from: internalFrom,
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
       subject:
         locale === "hy"
           ? "Շնորհակալություն կապ հաստատելու համար"
-          : "Thank you for contacting Ecosystem Studio",
+          : "Thank you for contacting AdLog",
       text: buildVisitorText(details.fullName, locale),
       html: buildVisitorHtml(details.fullName, locale)
     });
@@ -162,7 +162,7 @@ function buildVisitorText(fullName: string, locale: Locale) {
     return `${fullName}, շնորհակալություն կապ հաստատելու համար։ Մենք ստացանք ձեր հարցումը և շուտով կկապվենք ձեզ հետ հաջորդ քայլերի համար։`;
   }
 
-  return `${fullName}, thank you for contacting Ecosystem Studio. We received your request and will get back to you soon with clear next steps.`;
+  return `${fullName}, thank you for contacting AdLog. We received your request and will get back to you soon with clear next steps.`;
 }
 
 function buildVisitorHtml(fullName: string, locale: Locale) {
@@ -171,12 +171,12 @@ function buildVisitorHtml(fullName: string, locale: Locale) {
       ? {
           title: "Շնորհակալություն",
           body: "Մենք ստացանք ձեր հարցումը և շուտով կկապվենք ձեզ հետ հաջորդ քայլերի համար։",
-          footer: "Ecosystem Studio"
+          footer: "AdLog"
         }
       : {
           title: "Thank you",
           body: "We received your request and will get back to you soon with clear next steps.",
-          footer: "Ecosystem Studio"
+          footer: "AdLog"
         };
 
   return `

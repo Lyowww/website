@@ -1,7 +1,7 @@
 {
-  "name": "website",
+  "name": "adlog",
   "version": "1.0.0",
-  "description": "Ecosystem Studio — official website.",
+  "description": "AdLog — official website.",
   "private": true,
   "scripts": {
     "dev": "next dev",

@@ -148,14 +148,14 @@ function Navigation({ content }: { content: SiteContent }) {
           <a
             href={`/${content.locale}#top`}
             className="relative z-10 flex min-w-0 shrink-0 items-center gap-2 sm:gap-3"
-            aria-label="Ecosystem Studio home"
+            aria-label="AdLog home"
           >
             <span className="relative flex size-8 shrink-0 items-center justify-center rounded-full bg-cream-100 text-ink-950 sm:size-9">
               <span className="absolute inset-0 rounded-full bg-cyan-glow/25 blur-md" />
               <Sparkles className="relative size-3.5 sm:size-4" />
             </span>
             <span className="font-display truncate text-xs font-bold tracking-[-0.02em] sm:text-base">
-              Ecosystem Studio
+              AdLog
             </span>
           </a>
           <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 lg:block">
@@ -885,7 +885,7 @@ function ContactSection({ content }: { content: SiteContent }) {
                 <Send className="relative size-4 transition-transform group-hover:translate-x-1" />
               </button>
               <a
-                href="mailto:hello@ecosystem.studio?subject=Schedule%20a%20Call"
+                href="mailto:adlog.agency@gmail.com?subject=Schedule%20a%20Call"
                 className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-7 py-4 text-sm font-semibold text-cream-100 transition hover:border-cyan-glow/35 hover:bg-white/[0.09] sm:min-h-0 sm:w-auto"
               >
                 {content.contact.secondaryButton}
@@ -983,9 +983,9 @@ function SiteFooter({ content }: { content: SiteContent }) {
     <footer className="page-px footer-safe-pb border-t border-white/[0.08] pt-12">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 sm:flex-row sm:items-start sm:justify-between sm:gap-12">
         <div className="max-w-md">
-          <p className="font-display text-base font-semibold text-cream-100">Ecosystem Studio</p>
+          <p className="font-display text-base font-semibold text-cream-100">AdLog</p>
           <p className="mt-3 text-sm leading-relaxed text-cream-100/45">
-            © {year} Ecosystem Studio. {content.footer.rights}
+            © {year} AdLog. {content.footer.rights}
           </p>
         </div>
         <p className="max-w-lg text-sm leading-relaxed text-cream-100/50">{content.footer.note}</p>

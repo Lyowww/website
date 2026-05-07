@@ -18,10 +18,10 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  applicationName: "Ecosystem Studio",
+  applicationName: "AdLog",
   title: {
     default: "Digital Agency — Engineering, Automation & Growth",
-    template: "%s | Ecosystem Studio"
+    template: "%s | AdLog"
   },
   description:
     "Digital agency for scalable web and mobile products, automation systems, SEO, ads, Telegram bots, infrastructure, and growth strategy.",
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
     "web development",
     "mobile app development"
   ],
-  authors: [{ name: "Ecosystem Studio" }],
-  creator: "Ecosystem Studio",
-  publisher: "Ecosystem Studio",
+  authors: [{ name: "AdLog" }],
+  creator: "AdLog",
+  publisher: "AdLog",
   category: "technology",
   alternates: {
     canonical: "/en",

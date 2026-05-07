@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
     metadataBase: new URL(siteUrl),
     title: {
       default: content.seo.title,
-      template: `%s | Ecosystem Studio`
+      template: `%s | AdLog`
     },
     description: content.seo.description,
     keywords: content.seo.keywords,
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
     openGraph: {
       type: "website",
       url: canonicalUrl,
-      siteName: "Ecosystem Studio",
+      siteName: "AdLog",
       title: content.seo.title,
       description: content.seo.description,
       locale: rawLocale === "hy" ? "hy_AM" : "en_US",
