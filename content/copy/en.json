@@ -2,8 +2,8 @@
   "locale": "en",
   "languageLabel": "EN",
   "seo": {
-    "title": "AI Automation, Software Engineering & Digital Growth Agency",
-    "description": "Premium digital agency building scalable web and mobile products, AI automation systems, SEO, ads, Telegram bots, DevOps infrastructure, and business growth systems.",
+    "title": "AI Automation, Software Engineering & Marketing Agency",
+    "description": "Premium digital agency for top-level web & mobile products, AI automation systems, SEO, marketing, Telegram bots, and business growth ecosystems.",
     "keywords": [
       "AI automation agency",
       "software engineering agency",
@@ -20,13 +20,13 @@
     "services": "Services",
     "process": "Process",
     "contact": "Contact",
-    "start": "Start",
+    "start": "Get Free Consultation",
     "menu": "Menu",
     "close": "Close"
   },
   "processStepWord": "Step",
   "hero": {
-    "eyebrow": "AI, engineering, automation, growth",
+    "eyebrow": "AI, engineering, marketing, growth",
     "titleBefore": "Build Smarter",
     "titleHighlight": "Digital Systems",
     "titleAfter": "For Your Business",
@@ -78,12 +78,12 @@
     "benefits": {
       "eyebrow": "Why businesses work with us",
       "title": "Why Businesses Work With Us",
-      "description": "We combine strategic clarity, senior execution, and intelligent systems to create digital systems that compound over time."
+      "description": "We combine strategy, speed, and results - identifying problems and delivering fast, effective solutions for your business."
     },
     "services": {
-      "eyebrow": "Full-stack digital services",
+      "eyebrow": "Digital ecosystem services",
       "title": "A Full-Stack Growth Engine",
-      "description": "From product architecture to AI automation, paid acquisition, SEO, and infrastructure, every service is designed to make the business stronger."
+      "description": "From product architecture to AI automation, marketing, SEO, and content creation — we handle every step of the process so you can sit back and watch your business grow."
     },
     "technologies": {
       "eyebrow": "Technology stack",
@@ -93,22 +93,22 @@
     "process": {
       "eyebrow": "How we build",
       "title": "From Strategy To Scalable Growth",
-      "description": "A clear process keeps ambition focused, quality high, and momentum visible from the first conversation to post-launch optimization."
+      "description": "Our clear process keeps ambition focused, quality high, and momentum visible from the first conversation to post-launch optimization."
     },
     "showcase": {
       "eyebrow": "Showcase and results",
-      "title": "Systems That Look Premium And Work Hard",
+      "title": "Premium Systems That Work Hard",
       "description": "Every deliverable becomes part of a broader business engine: measurable, automated, integrated, and ready to scale."
     },
     "contact": {
       "eyebrow": "Start the conversation",
-      "title": "Tell Us What You Want To Build",
+      "title": "Let’s Turn Your Idea Into Reality",
       "description": "Share your goals and we will map the best path across product, engineering, AI automation, marketing, and infrastructure."
     }
   },
   "benefits": [
     {
-      "title": "Senior-Level Engineering",
+      "title": "Top-Level Engineering",
       "description": "Architecture, implementation, and delivery led with the discipline of enterprise product teams.",
       "icon": "code2"
     },
@@ -165,7 +165,7 @@
       "icon": "workflow"
     },
     {
-      "title": "SEO Optimization",
+      "title": "SEO",
       "description": "Technical SEO, content architecture, analytics, and growth loops for organic visibility.",
       "icon": "search"
     },
@@ -263,8 +263,8 @@
       "icon": "zap"
     },
     {
-      "title": "Launch & Scaling",
-      "description": "We deploy, measure, optimize, and keep improving the stack as demand grows.",
+      "title": "Launch & Marketing",
+      "description": "We deploy, market, optimize, and keep improving the ecosystem as demand grows.",
       "icon": "rocket"
     }
   ],
@@ -306,7 +306,7 @@
     }
   ],
   "showcasePanel": {
-    "eyebrow": "Unified view",
+    "eyebrow": "Ecosystem view",
     "title": "One connected operating layer for growth.",
     "description": "We connect product, marketing, AI, automation, analytics, and infrastructure so your digital presence behaves like one intelligent system.",
     "health": "System Health",
@@ -323,14 +323,14 @@
     "cards": [
       {
         "title": "Telegram",
-        "value": "@adlog",
-        "href": "https://t.me/adlog",
+        "value": "@ecosystemstudio",
+        "href": "https://t.me/",
         "icon": "messageCircle"
       },
       {
         "title": "Email",
-        "value": "adlog.agency@gmail.com",
-        "href": "mailto:adlog.agency@gmail.com",
+        "value": "hello@ecosystem.studio",
+        "href": "mailto:hello@ecosystem.studio",
         "icon": "mail"
       },
       {
@@ -385,7 +385,7 @@
   },
   "finalCta": {
     "heading": "More Visibility. More Customers. More Growth.",
-    "subtitle": "We combine engineering, AI, automation, SEO, and marketing to help businesses scale faster and operate smarter.",
+    "subtitle": "Ready to stand out?",
     "button": "Build Your Growth System"
   },
   "footer": {

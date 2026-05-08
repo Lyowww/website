@@ -75,11 +75,12 @@ export function FormDropdown({ name, label, options, placeholder }: FormDropdown
             id={listId}
             role="listbox"
             aria-labelledby={`${id}-label`}
+            data-lenis-prevent-wheel
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute left-0 right-0 z-30 mt-2 max-h-52 overflow-y-auto rounded-2xl border border-white/12 bg-ink-900/96 py-1 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.85)] backdrop-blur-xl"
+            className="absolute left-0 right-0 z-30 mt-2 max-h-52 overflow-y-auto overscroll-contain rounded-2xl border border-white/12 bg-ink-900/96 py-1 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.85)] backdrop-blur-xl"
           >
             <button
               type="button"

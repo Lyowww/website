@@ -16,7 +16,8 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       duration: 0.95,
       easing: (time: number) => Math.min(1, 1.001 - Math.pow(2, -10 * time)),
       smoothWheel: true,
-      wheelMultiplier: 0.82
+      wheelMultiplier: 0.82,
+      allowNestedScroll: true
     });
 
     let frame = 0;

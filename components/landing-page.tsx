@@ -184,7 +184,7 @@ function Navigation({ content }: { content: SiteContent }) {
                   }`}
                   hrefLang={locale}
                 >
-                  {locale}
+                  {locale.toUpperCase()}
                 </a>
               ))}
             </div>

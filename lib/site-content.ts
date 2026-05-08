@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 
 import copyEn from "@/content/copy/en.json";
-import copyHy from "@/content/copy/hy.json";
+import copyHyPartial from "@/content/copy/hy.json";
 
 import { resolveIcon } from "@/lib/content-icons";
 
@@ -147,6 +147,76 @@ type SiteCopyJson = {
   footer: SiteContent["footer"];
 };
 
+/** Armenian JSON overlay — omit English-canonical rows; merged at runtime with `en.json`. */
+type SiteCopyHyOverlay = Partial<Omit<SiteCopyJson, "benefits" | "services" | "processSteps" | "showcase" | "showcasePanel">> & {
+  benefits?: Array<Partial<Pick<SiteCopyJson["benefits"][number], "description">>>;
+  services?: Array<Partial<Pick<SiteCopyJson["services"][number], "description">>>;
+  processSteps?: Array<Partial<Pick<SiteCopyJson["processSteps"][number], "description">>>;
+  showcase?: Array<Partial<Pick<SiteCopyJson["showcase"][number], "description">>>;
+  showcasePanel?: Partial<Omit<SiteCopyJson["showcasePanel"], "items">>;
+};
+
+/**
+ * Armenian copy is an overlay on English: UI strings and descriptions live in `hy.json`;
+ * service names, benefit titles, process step titles, showcase titles/icons/metrics, tech stack,
+ * and showcase panel item labels always come from `en.json` (single source of truth).
+ */
+function mergeHySiteCopy(en: SiteCopyJson, hy: SiteCopyHyOverlay): SiteCopyJson {
+  const contactMerged = hy.contact
+    ? {
+        ...en.contact,
+        ...hy.contact,
+        cards: hy.contact.cards ?? en.contact.cards
+      }
+    : en.contact;
+
+  return {
+    ...en,
+    locale: "hy",
+    languageLabel: hy.languageLabel ?? en.languageLabel,
+    seo: hy.seo ?? en.seo,
+    nav: hy.nav ?? en.nav,
+    processStepWord: hy.processStepWord ?? en.processStepWord,
+    hero: hy.hero ?? en.hero,
+    sections: hy.sections ?? en.sections,
+    techGroups: en.techGroups,
+    benefits: en.benefits.map((row, i) => ({
+      ...row,
+      ...(hy.benefits?.[i] ?? {}),
+      title: row.title,
+      icon: row.icon
+    })),
+    services: en.services.map((row, i) => ({
+      ...row,
+      ...(hy.services?.[i] ?? {}),
+      title: row.title,
+      icon: row.icon
+    })),
+    processSteps: en.processSteps.map((row, i) => ({
+      ...row,
+      ...(hy.processSteps?.[i] ?? {}),
+      title: row.title,
+      icon: row.icon
+    })),
+    showcase: en.showcase.map((row, i) => ({
+      ...row,
+      ...(hy.showcase?.[i] ?? {}),
+      title: row.title,
+      icon: row.icon,
+      metric: row.metric,
+      metricLabel: row.metricLabel
+    })),
+    showcasePanel: {
+      ...en.showcasePanel,
+      ...(hy.showcasePanel ?? {}),
+      items: en.showcasePanel.items
+    },
+    contact: contactMerged,
+    finalCta: hy.finalCta ?? en.finalCta,
+    footer: hy.footer ?? en.footer
+  };
+}
+
 function hydrateSiteCopy(raw: SiteCopyJson): SiteContent {
   return {
     ...raw,
@@ -201,7 +271,9 @@ export function isLocale(value: string): value is Locale {
 
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://adlog.one";
 
+const copyHyMerged = mergeHySiteCopy(copyEn as SiteCopyJson, copyHyPartial as SiteCopyHyOverlay);
+
 export const contentByLocale: Record<Locale, SiteContent> = {
-  en: hydrateSiteCopy(copyEn),
-  hy: hydrateSiteCopy(copyHy)
+  en: hydrateSiteCopy(copyEn as SiteCopyJson),
+  hy: hydrateSiteCopy(copyHyMerged)
 };
