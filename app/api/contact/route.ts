@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
-import { isLocale, type Locale } from "@/lib/site-content";
+import { contentByLocale, isLocale, type Locale } from "@/lib/site-content";
 
 type ContactPayload = {
   fullName?: string;
@@ -23,6 +23,8 @@ export async function POST(request: Request) {
     const email = sanitize(payload.email);
     const projectDescription = sanitize(payload.projectDescription);
     const locale: Locale = payload.locale && isLocale(payload.locale) ? payload.locale : "en";
+    const copy = contentByLocale[locale];
+    const emailCopy = copy.contact.email;
 
     if (!fullName || !email || !emailPattern.test(email) || !projectDescription) {
       return NextResponse.json({ error: "Missing required contact fields." }, { status: 400 });
@@ -49,16 +51,16 @@ export async function POST(request: Request) {
       timeline: sanitize(payload.timeline) || "-"
     };
 
-    const internalFrom = formatFrom("AdLog Website", contactFrom);
-    const visitorFrom = formatFrom("AdLog", contactFrom);
+    const internalFrom = formatFrom(emailCopy.internalFromLabel, contactFrom);
+    const visitorFrom = formatFrom(emailCopy.visitorFromLabel, contactFrom);
 
     const { error: teamError } = await resend.emails.send({
       from: internalFrom,
       to: [contactTo],
       replyTo: email,
       subject: `New consultation request from ${details.fullName}`,
-      text: buildInternalText(details),
-      html: buildInternalHtml(details)
+      text: buildInternalText(details, copy),
+      html: buildInternalHtml(details, copy)
     });
 
     if (teamError) {
@@ -69,12 +71,9 @@ export async function POST(request: Request) {
     const { error: visitorError } = await resend.emails.send({
       from: visitorFrom,
       to: [email],
-      subject:
-        locale === "hy"
-          ? "Շնորհակալություն կապ հաստատելու համար"
-          : "Thank you for contacting AdLog",
-      text: buildVisitorText(details.fullName, locale),
-      html: buildVisitorHtml(details.fullName, locale)
+      subject: emailCopy.visitorSubject,
+      text: buildVisitorText(details.fullName, copy),
+      html: buildVisitorHtml(details.fullName, copy)
     });
 
     if (visitorError) {
@@ -109,38 +108,46 @@ function escapeHtml(value: string) {
     .replace(/'/g, "&#039;");
 }
 
-function buildInternalText(details: Record<string, string>) {
+function buildInternalText(
+  details: Record<string, string>,
+  copy: (typeof contentByLocale)[Locale],
+) {
+  const f = copy.contact.fields;
   return [
-    "New consultation request",
+    copy.contact.email.internalSummaryTitle,
     "",
-    `Full Name: ${details.fullName}`,
-    `Company Name: ${details.companyName}`,
-    `Email: ${details.email}`,
-    `Phone / Telegram: ${details.phoneTelegram}`,
-    `Services Interested In: ${details.servicesInterested}`,
-    `Estimated Budget: ${details.estimatedBudget}`,
-    `Timeline: ${details.timeline}`,
+    `${f.fullName}: ${details.fullName}`,
+    `${f.companyName}: ${details.companyName}`,
+    `${f.email}: ${details.email}`,
+    `${f.phoneTelegram}: ${details.phoneTelegram}`,
+    `${f.servicesInterested}: ${details.servicesInterested}`,
+    `${f.estimatedBudget}: ${details.estimatedBudget}`,
+    `${f.timeline}: ${details.timeline}`,
     "",
-    "Project Description:",
+    `${f.projectDescription}:`,
     details.projectDescription
   ].join("\n");
 }
 
-function buildInternalHtml(details: Record<string, string>) {
+function buildInternalHtml(
+  details: Record<string, string>,
+  copy: (typeof contentByLocale)[Locale],
+) {
+  const f = copy.contact.fields;
   const rows = [
-    ["Full Name", details.fullName],
-    ["Company Name", details.companyName],
-    ["Email", details.email],
-    ["Phone / Telegram", details.phoneTelegram],
-    ["Services Interested In", details.servicesInterested],
-    ["Estimated Budget", details.estimatedBudget],
-    ["Timeline", details.timeline],
-    ["Project Description", details.projectDescription]
+    [f.fullName, details.fullName],
+    [f.companyName, details.companyName],
+    [f.email, details.email],
+    [f.phoneTelegram, details.phoneTelegram],
+    [f.servicesInterested, details.servicesInterested],
+    [f.estimatedBudget, details.estimatedBudget],
+    [f.timeline, details.timeline],
+    [f.projectDescription, details.projectDescription]
   ];
 
   return `
     <div style="font-family:Inter,Arial,sans-serif;background:#061A1F;color:#F2EFEA;padding:28px;border-radius:18px">
-      <h1 style="margin:0 0 18px;font-size:24px">New consultation request</h1>
+      <h1 style="margin:0 0 18px;font-size:24px">${escapeHtml(copy.contact.email.internalSummaryTitle)}</h1>
       <table style="width:100%;border-collapse:collapse">
         ${rows
           .map(
@@ -157,33 +164,21 @@ function buildInternalHtml(details: Record<string, string>) {
   `;
 }
 
-function buildVisitorText(fullName: string, locale: Locale) {
-  if (locale === "hy") {
-    return `${fullName}, շնորհակալություն կապ հաստատելու համար։ Մենք ստացանք ձեր հարցումը և շուտով կկապվենք ձեզ հետ հաջորդ քայլերի համար։`;
-  }
-
-  return `${fullName}, thank you for contacting AdLog. We received your request and will get back to you soon with clear next steps.`;
+function buildVisitorText(
+  fullName: string,
+  copy: (typeof contentByLocale)[Locale],
+) {
+  return copy.contact.email.visitorText.replace(/\{\{name\}\}/g, fullName);
 }
 
-function buildVisitorHtml(fullName: string, locale: Locale) {
-  const copy =
-    locale === "hy"
-      ? {
-          title: "Շնորհակալություն",
-          body: "Մենք ստացանք ձեր հարցումը և շուտով կկապվենք ձեզ հետ հաջորդ քայլերի համար։",
-          footer: "AdLog"
-        }
-      : {
-          title: "Thank you",
-          body: "We received your request and will get back to you soon with clear next steps.",
-          footer: "AdLog"
-        };
+function buildVisitorHtml(fullName: string, copy: (typeof contentByLocale)[Locale]) {
+  const e = copy.contact.email;
 
   return `
     <div style="font-family:Inter,Arial,sans-serif;background:#061A1F;color:#F2EFEA;padding:32px;border-radius:18px">
-      <p style="margin:0 0 10px;color:#7CE7F7;font-size:13px;letter-spacing:.16em;text-transform:uppercase">${copy.footer}</p>
-      <h1 style="margin:0 0 16px;font-size:28px">${copy.title}, ${escapeHtml(fullName)}</h1>
-      <p style="margin:0;color:#D7DEDC;line-height:1.7;font-size:16px">${copy.body}</p>
+      <p style="margin:0 0 10px;color:#7CE7F7;font-size:13px;letter-spacing:.16em;text-transform:uppercase">${escapeHtml(e.visitorBrandEyebrow)}</p>
+      <h1 style="margin:0 0 16px;font-size:28px">${escapeHtml(e.visitorHtmlTitle)}, ${escapeHtml(fullName)}</h1>
+      <p style="margin:0;color:#D7DEDC;line-height:1.7;font-size:16px">${escapeHtml(e.visitorHtmlBody)}</p>
     </div>
   `;
 }

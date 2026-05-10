@@ -14,7 +14,7 @@ export function getStructuredData(locale: Locale) {
       {
         "@type": "Organization",
         "@id": `${siteUrl}/#organization`,
-        name: "AdLog",
+        name: content.brand.name,
         url: siteUrl,
         email: "adlog.agency@gmail.com",
         sameAs: ["https://t.me/adlog"],
@@ -24,7 +24,7 @@ export function getStructuredData(locale: Locale) {
         "@type": "WebSite",
         "@id": `${siteUrl}/#website`,
         url: siteUrl,
-        name: "AdLog",
+        name: content.brand.name,
         publisher: {
           "@id": `${siteUrl}/#organization`
         },
@@ -47,30 +47,14 @@ export function getStructuredData(locale: Locale) {
       {
         "@type": "FAQPage",
         "@id": `${canonicalUrl}#faq`,
-        mainEntity: [
-          {
-            "@type": "Question",
-            name: locale === "hy" ? "Ի՞նչ ծառայություններ եք մատուցում։" : "What services do you provide?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text:
-                locale === "hy"
-                  ? "Մենք տրամադրում ենք վեբ և մոբայլ մշակում, AI ավտոմատացում, SEO, գովազդ, Telegram բոտեր, DevOps և բիզնեսի աճի ռազմավարություն։"
-                  : "We provide web and mobile development, AI automation, SEO, advertising, Telegram bots, DevOps infrastructure, and business growth strategy."
-            }
-          },
-          {
-            "@type": "Question",
-            name: locale === "hy" ? "Կարո՞ղ եք ավտոմատացնել ներքին գործընթացները։" : "Can you automate internal business processes?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text:
-                locale === "hy"
-                  ? "Այո։ Մենք կառուցում ենք AI գործակալներ, workflow-ներ, CRM ինտեգրացիաներ և bot համակարգեր, որոնք նվազեցնում են manual աշխատանքը։"
-                  : "Yes. We build AI agents, workflows, CRM integrations, and bot systems that reduce manual work and improve operational speed."
-            }
+        mainEntity: content.faq.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item.answer
           }
-        ]
+        }))
       }
     ]
   };

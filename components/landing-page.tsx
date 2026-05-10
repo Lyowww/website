@@ -171,14 +171,14 @@ function Navigation({ content }: { content: SiteContent }) {
           <a
             href={`/${content.locale}#top`}
             className="relative z-10 flex min-w-0 shrink-0 items-center gap-2 sm:gap-3"
-            aria-label="AdLog home"
+            aria-label={content.brand.homeAriaLabel}
           >
             <span className="relative flex size-8 shrink-0 items-center justify-center rounded-full bg-cream-100 text-ink-950 sm:size-9">
               <span className="absolute inset-0 rounded-full bg-cyan-glow/25 blur-md" />
               <Sparkles className="relative size-3.5 sm:size-4" />
             </span>
             <span className="font-display truncate text-xs font-bold tracking-[-0.02em] sm:text-base">
-              AdLog
+              {content.brand.name}
             </span>
           </a>
           <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 lg:block">
@@ -377,7 +377,7 @@ function HeroSection({ content }: { content: SiteContent }) {
               href="#contact"
               animate={{ scale: [1, 1.13, 1] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="group inline-flex shrink-0 items-center gap-2 rounded-full bg-yellow-glow px-5 py-2.5 text-sm font-semibold text-ink-950 transition hover:brightness-110 sm:gap-2.5 sm:px-6 sm:py-3 sm:text-base"
+              className="group inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-ink-950 transition hover:brightness-110 sm:gap-2.5 sm:px-6 sm:py-3 sm:text-base"
             >
               {content.nav.cta}
               <ChevronRight className="size-3.5 transition-transform group-hover:translate-x-0.5 sm:size-4" />
@@ -491,7 +491,7 @@ function HeroDashboard({ content }: { content: SiteContent }) {
                 <p className="text-sm font-medium text-cream-100/78">
                   {content.hero.acquisition}
                 </p>
-                <p className="text-xs text-cyan-glow">+22.8%</p>
+                <p className="text-xs text-cyan-glow">{content.hero.acquisitionDelta}</p>
               </div>
               <div className="mb-4 flex min-h-28 items-end gap-1.5 overflow-x-auto pb-1 sm:h-32 sm:gap-2">
                 {[42, 58, 46, 72, 64, 86, 78, 96].map((height, index) => (
@@ -1159,10 +1159,10 @@ function SiteFooter({ content }: { content: SiteContent }) {
       <div className="mx-auto flex max-w-7xl flex-col gap-8 sm:flex-row sm:items-start sm:justify-between sm:gap-12">
         <div className="max-w-md">
           <p className="font-display text-base font-semibold text-cream-100">
-            AdLog
+            {content.brand.name}
           </p>
           <p className="mt-3 text-sm leading-relaxed text-cream-100/45">
-            © {year} AdLog. {content.footer.rights}
+            © {year} {content.brand.name}. {content.footer.rights}
           </p>
         </div>
         <p className="max-w-lg text-sm leading-relaxed text-cream-100/50">

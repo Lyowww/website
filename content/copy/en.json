@@ -1,6 +1,10 @@
 {
   "locale": "en",
   "languageLabel": "EN",
+  "brand": {
+    "name": "AdLog",
+    "homeAriaLabel": "AdLog home"
+  },
   "seo": {
     "title": "AI Automation, Software Engineering & Marketing Agency",
     "description": "Premium digital agency for top-level web & mobile products, AI automation systems, SEO, marketing, Telegram bots, and business growth ecosystems.",
@@ -15,6 +19,16 @@
       "business growth strategy"
     ]
   },
+  "faq": [
+    {
+      "question": "What services do you provide?",
+      "answer": "We provide web and mobile development, AI automation, SEO, advertising, Telegram bots, DevOps infrastructure, and business growth strategy."
+    },
+    {
+      "question": "Can you automate internal business processes?",
+      "answer": "Yes. We build AI agents, workflows, CRM integrations, and bot systems that reduce manual work and improve operational speed."
+    }
+  ],
   "nav": {
     "benefits": "Benefits",
     "services": "Services",
@@ -73,7 +87,8 @@
     "botFlow": "Bot Flow",
     "botFlowDescription": "Lead captured, qualified, and synced to CRM.",
     "launchReady": "Launch Ready",
-    "ciHealthy": "CI/CD healthy"
+    "ciHealthy": "CI/CD healthy",
+    "acquisitionDelta": "+22.8%"
   },
   "sections": {
     "benefits": {
@@ -382,6 +397,16 @@
       "fullName": "Please enter your full name.",
       "email": "Please enter a valid email.",
       "projectDescription": "Tell us a little about the project."
+    },
+    "email": {
+      "internalSummaryTitle": "New consultation request",
+      "internalFromLabel": "AdLog Website",
+      "visitorFromLabel": "AdLog",
+      "visitorSubject": "Thank you for contacting AdLog",
+      "visitorText": "{{name}}, thank you for contacting AdLog. We received your request and will get back to you soon with clear next steps.",
+      "visitorHtmlTitle": "Thank you",
+      "visitorHtmlBody": "We received your request and will get back to you soon with clear next steps.",
+      "visitorBrandEyebrow": "AdLog"
     }
   },
   "finalCta": {

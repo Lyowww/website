@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Manrope } from "next/font/google";
 import type { ReactNode } from "react";
+import copyEn from "@/content/copy/en.json";
 import { siteUrl } from "@/lib/site-content";
 import "./globals.css";
 
@@ -18,26 +19,16 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  applicationName: "AdLog",
+  applicationName: copyEn.brand.name,
   title: {
-    default: "Digital Agency — Engineering, Automation & Growth",
-    template: "%s | AdLog"
+    default: copyEn.seo.title,
+    template: `%s | ${copyEn.brand.name}`
   },
-  description:
-    "Digital agency for scalable web and mobile products, automation systems, SEO, ads, Telegram bots, infrastructure, and growth strategy.",
-  keywords: [
-    "digital agency",
-    "software engineering",
-    "automation systems",
-    "SEO services",
-    "Telegram bot development",
-    "DevOps infrastructure",
-    "web development",
-    "mobile app development"
-  ],
-  authors: [{ name: "AdLog" }],
-  creator: "AdLog",
-  publisher: "AdLog",
+  description: copyEn.seo.description,
+  keywords: copyEn.seo.keywords,
+  authors: [{ name: copyEn.brand.name }],
+  creator: copyEn.brand.name,
+  publisher: copyEn.brand.name,
   category: "technology",
   alternates: {
     canonical: "/en",

@@ -17,11 +17,16 @@ export type IconContent = {
 export type SiteContent = {
   locale: Locale;
   languageLabel: string;
+  brand: {
+    name: string;
+    homeAriaLabel: string;
+  };
   seo: {
     title: string;
     description: string;
     keywords: string[];
   };
+  faq: { question: string; answer: string }[];
   nav: {
     benefits: string;
     services: string;
@@ -52,6 +57,7 @@ export type SiteContent = {
     botFlowDescription: string;
     launchReady: string;
     ciHealthy: string;
+    acquisitionDelta: string;
   };
   sections: {
     benefits: SectionCopy;
@@ -105,6 +111,17 @@ export type SiteContent = {
       email: string;
       projectDescription: string;
     };
+    email: {
+      internalSummaryTitle: string;
+      internalFromLabel: string;
+      visitorFromLabel: string;
+      visitorSubject: string;
+      /** Use `{{name}}` for the submitter’s name. */
+      visitorText: string;
+      visitorHtmlTitle: string;
+      visitorHtmlBody: string;
+      visitorBrandEyebrow: string;
+    };
   };
   finalCta: {
     heading: string;
@@ -127,7 +144,9 @@ type SectionCopy = {
 type SiteCopyJson = {
   locale: string;
   languageLabel: string;
+  brand: SiteContent["brand"];
   seo: SiteContent["seo"];
+  faq: SiteContent["faq"];
   nav: SiteContent["nav"];
   processStepWord: string;
   hero: Omit<SiteContent["hero"], "stats" | "dashboardStats"> & {
@@ -158,9 +177,40 @@ type SiteCopyJson = {
 type SiteCopyHyOverlay = Partial<
   Omit<
     SiteCopyJson,
-    "benefits" | "services" | "processSteps" | "showcase" | "showcasePanel"
+    | "benefits"
+    | "services"
+    | "processSteps"
+    | "showcase"
+    | "showcasePanel"
+    | "brand"
+    | "seo"
+    | "faq"
+    | "nav"
+    | "hero"
+    | "sections"
+    | "contact"
+    | "finalCta"
+    | "footer"
   >
 > & {
+  brand?: Partial<SiteCopyJson["brand"]>;
+  seo?: Partial<SiteCopyJson["seo"]>;
+  faq?: SiteCopyJson["faq"];
+  nav?: Partial<SiteCopyJson["nav"]>;
+  hero?: Partial<SiteCopyJson["hero"]>;
+  sections?: Partial<{
+    [K in keyof SiteCopyJson["sections"]]: Partial<SiteCopyJson["sections"][K]>;
+  }>;
+  contact?: Partial<
+    Omit<SiteCopyJson["contact"], "cards" | "fields" | "validation" | "email">
+  > & {
+    cards?: SiteCopyJson["contact"]["cards"];
+    fields?: Partial<SiteCopyJson["contact"]["fields"]>;
+    validation?: Partial<SiteCopyJson["contact"]["validation"]>;
+    email?: Partial<SiteCopyJson["contact"]["email"]>;
+  };
+  finalCta?: Partial<SiteCopyJson["finalCta"]>;
+  footer?: Partial<SiteCopyJson["footer"]>;
   benefits?: Array<
     Partial<Pick<SiteCopyJson["benefits"][number], "description">>
   >;
@@ -190,18 +240,39 @@ function mergeHySiteCopy(
         ...en.contact,
         ...hy.contact,
         cards: hy.contact.cards ?? en.contact.cards,
+        fields: { ...en.contact.fields, ...hy.contact.fields },
+        validation: { ...en.contact.validation, ...hy.contact.validation },
+        email: { ...en.contact.email, ...hy.contact.email },
+        budgetOptions: hy.contact.budgetOptions ?? en.contact.budgetOptions,
+        timelineOptions: hy.contact.timelineOptions ?? en.contact.timelineOptions,
       }
     : en.contact;
+
+  const sectionsMerged = hy.sections
+    ? {
+        benefits: { ...en.sections.benefits, ...hy.sections.benefits },
+        services: { ...en.sections.services, ...hy.sections.services },
+        technologies: {
+          ...en.sections.technologies,
+          ...hy.sections.technologies,
+        },
+        process: { ...en.sections.process, ...hy.sections.process },
+        showcase: { ...en.sections.showcase, ...hy.sections.showcase },
+        contact: { ...en.sections.contact, ...hy.sections.contact },
+      }
+    : en.sections;
 
   return {
     ...en,
     locale: "hy",
     languageLabel: hy.languageLabel ?? en.languageLabel,
-    seo: hy.seo ?? en.seo,
-    nav: hy.nav ?? en.nav,
+    brand: hy.brand ? { ...en.brand, ...hy.brand } : en.brand,
+    seo: hy.seo ? { ...en.seo, ...hy.seo } : en.seo,
+    faq: hy.faq ?? en.faq,
+    nav: hy.nav ? { ...en.nav, ...hy.nav } : en.nav,
     processStepWord: hy.processStepWord ?? en.processStepWord,
-    hero: hy.hero ?? en.hero,
-    sections: hy.sections ?? en.sections,
+    hero: hy.hero ? { ...en.hero, ...hy.hero } : en.hero,
+    sections: sectionsMerged,
     techGroups: en.techGroups,
     benefits: en.benefits.map((row, i) => ({
       ...row,
@@ -234,9 +305,9 @@ function mergeHySiteCopy(
       ...(hy.showcasePanel ?? {}),
       items: en.showcasePanel.items,
     },
-    contact: contactMerged,
-    finalCta: hy.finalCta ?? en.finalCta,
-    footer: hy.footer ?? en.footer,
+    contact: contactMerged as SiteCopyJson["contact"],
+    finalCta: hy.finalCta ? { ...en.finalCta, ...hy.finalCta } : en.finalCta,
+    footer: hy.footer ? { ...en.footer, ...hy.footer } : en.footer,
   };
 }
 
@@ -296,7 +367,7 @@ export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://adlog.one";
 
 const copyHyMerged = mergeHySiteCopy(
   copyEn as SiteCopyJson,
-  copyHyPartial as SiteCopyHyOverlay,
+  copyHyPartial satisfies SiteCopyHyOverlay,
 );
 
 export const contentByLocale: Record<Locale, SiteContent> = {

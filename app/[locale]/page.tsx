@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
     metadataBase: new URL(siteUrl),
     title: {
       default: content.seo.title,
-      template: `%s | AdLog`
+      template: `%s | ${content.brand.name}`
     },
     description: content.seo.description,
     keywords: content.seo.keywords,
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
     openGraph: {
       type: "website",
       url: canonicalUrl,
-      siteName: "AdLog",
+      siteName: content.brand.name,
       title: content.seo.title,
       description: content.seo.description,
       locale: rawLocale === "hy" ? "hy_AM" : "en_US",
