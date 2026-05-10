@@ -1,11 +1,15 @@
 "use client";
 
 import {
+  MotionConfig,
   motion,
+  useInView,
   useMotionValue,
+  useMotionValueEvent,
   useSpring,
   useScroll,
   useTransform,
+  type MotionValue,
   type Variants,
 } from "framer-motion";
 import {
@@ -14,15 +18,23 @@ import {
   ChevronRight,
   Menu,
   Send,
-  Sparkles,
   X,
 } from "lucide-react";
-import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import {
+  createContext,
+  type FormEvent,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { BrandLogo } from "@/components/brand-logo";
 import { FormDropdown } from "@/components/form-dropdown";
 import { MagneticButton } from "@/components/magnetic-button";
 import { SectionTitle } from "@/components/section-title";
 import { SmoothScroll } from "@/components/smooth-scroll";
-import { TiltCard } from "@/components/tilt-card";
 import {
   contentByLocale,
   locales,
@@ -30,12 +42,59 @@ import {
   type SiteContent,
 } from "@/lib/site-content";
 
+/** Anchors mirrored in the header — order matches section DOM / scroll sequence */
+const NAV_ANCHOR_IDS = [
+  "services",
+  "technologies",
+  "process",
+  "contact",
+  "faq",
+  "payment",
+] as const;
+
+const TabVisibleContext = createContext(true);
+
+function TabVisibleProvider({ children }: { children: ReactNode }) {
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const sync = () => {
+      const hidden = document.hidden;
+      setVisible(!hidden);
+      document.documentElement.toggleAttribute("data-tab-hidden", hidden);
+    };
+
+    sync();
+    document.addEventListener("visibilitychange", sync);
+    return () => {
+      document.removeEventListener("visibilitychange", sync);
+      document.documentElement.removeAttribute("data-tab-hidden");
+    };
+  }, []);
+
+  return (
+    <TabVisibleContext.Provider value={visible}>
+      {children}
+    </TabVisibleContext.Provider>
+  );
+}
+
+function useTabVisible() {
+  return useContext(TabVisibleContext);
+}
+
+/** Smooth symmetrical easing for looping ambient motion */
+const EASE_BREATH: [number, number, number, number] = [0.45, 0, 0.55, 1];
+
+/** Apple-like deceleration — smooth stops without sluggishness */
+const EASE_PREMIUM: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
 const sectionReveal: Variants = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 36 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.62, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.74, ease: EASE_PREMIUM },
   },
 };
 
@@ -43,18 +102,55 @@ const staggerContainer: Variants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.055,
+      staggerChildren: 0.068,
     },
   },
 };
 
 const cardReveal: Variants = {
-  hidden: { opacity: 0, y: 22, scale: 0.99 },
+  hidden: { opacity: 0, y: 28, scale: 0.985 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.52, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.62, ease: EASE_PREMIUM },
+  },
+};
+
+const heroTitleStagger: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.09,
+      delayChildren: 0.03,
+    },
+  },
+};
+
+const heroTitleLine: Variants = {
+  hidden: { opacity: 0, y: 36 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.82, ease: EASE_PREMIUM },
+  },
+};
+
+const processLaneFromLeft: Variants = {
+  hidden: { opacity: 0, x: -40 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.68, ease: EASE_PREMIUM },
+  },
+};
+
+const processLaneFromRight: Variants = {
+  hidden: { opacity: 0, x: 40 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.68, ease: EASE_PREMIUM },
   },
 };
 
@@ -66,25 +162,31 @@ export function LandingPage({ locale }: LandingPageProps) {
   const content = contentByLocale[locale];
 
   return (
-    <SmoothScroll>
-      <MouseLight />
-      <div className="noise-overlay" />
-      <main
-        className="relative min-h-screen overflow-hidden bg-ink-950 text-cream-100"
-        lang={locale}
-      >
-        <Navigation content={content} />
-        <HeroSection content={content} />
-        <TrustSection content={content} />
-        <ServicesSection content={content} />
-        <TechnologiesSection content={content} />
-        <ProcessSection content={content} />
-        <ShowcaseSection content={content} />
-        <ContactSection content={content} />
-        <FinalCtaSection content={content} />
-        <SiteFooter content={content} />
-      </main>
-    </SmoothScroll>
+    <MotionConfig reducedMotion="user">
+      <SmoothScroll>
+        <TabVisibleProvider>
+          <MouseLight />
+          <div className="noise-overlay" />
+          <main
+            className="studio-surface relative isolate min-h-screen overflow-hidden bg-ink-950/94 text-cream-100"
+            lang={locale}
+          >
+            <ScrollProgressBar />
+            <Navigation content={content} />
+            <HeroSection content={content} />
+            <ServicesSection content={content} />
+            <TechnologiesSection content={content} />
+            <ProcessSection content={content} />
+            {/* <ShowcaseSection content={content} /> */}
+            <ContactSection content={content} />
+            <FaqSection content={content} />
+            <PaymentSection content={content} />
+            <FinalCtaSection content={content} />
+            <SiteFooter content={content} />
+          </main>
+        </TabVisibleProvider>
+      </SmoothScroll>
+    </MotionConfig>
   );
 }
 
@@ -137,13 +239,83 @@ function MouseLight() {
   );
 }
 
+function ScrollProgressBar() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 88,
+    damping: 26,
+    mass: 0.12,
+  });
+
+  return (
+    <motion.div
+      className="pointer-events-none fixed inset-x-0 top-0 z-[100] h-[3px] origin-left"
+      style={{ scaleX }}
+      aria-hidden
+    >
+      <div className="h-full w-full bg-gradient-to-r from-transparent via-cyan-glow to-lime-glow/95 opacity-90 shadow-[0_1px_20px_rgba(124,231,247,0.45)]" />
+    </motion.div>
+  );
+}
+
 function Navigation({ content }: { content: SiteContent }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+  const { scrollY } = useScroll();
+  const [elevated, setElevated] = useState(false);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setElevated(latest > 32);
+  });
+
+  useEffect(() => {
+    const allowed = new Set<string>(NAV_ANCHOR_IDS);
+    const elements = NAV_ANCHOR_IDS.map((id) =>
+      document.getElementById(id),
+    ).filter((node): node is HTMLElement => Boolean(node));
+
+    if (elements.length === 0) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        const next = visible[0]?.target.id ?? null;
+        if (next && allowed.has(next)) {
+          setActiveSection(next);
+        }
+      },
+      { rootMargin: "-92px 0px -56% 0px", threshold: [0, 0.08, 0.15, 0.28] },
+    );
+
+    elements.forEach((element) => observer.observe(element));
+
+    const syncHash = () => {
+      const hash = window.location.hash.slice(1);
+      if (hash && allowed.has(hash)) {
+        setActiveSection(hash);
+      }
+    };
+
+    syncHash();
+    window.addEventListener("hashchange", syncHash);
+
+    return () => {
+      window.removeEventListener("hashchange", syncHash);
+      observer.disconnect();
+    };
+  }, []);
+
   const navItems = [
-    [content.nav.benefits, "benefits"],
     [content.nav.services, "services"],
+    [content.nav.technologies, "technologies"],
     [content.nav.process, "process"],
     [content.nav.contact, "contact"],
+    [content.nav.faq, "faq"],
+    [content.nav.payment, "payment"],
   ];
 
   useEffect(() => {
@@ -164,30 +336,44 @@ function Navigation({ content }: { content: SiteContent }) {
       <motion.header
         initial={{ opacity: 0, y: -18 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.58, ease: EASE_PREMIUM }}
         className="header-safe-pt page-px fixed left-0 right-0 top-0 z-40"
       >
-        <nav className="relative mx-auto flex max-w-7xl items-center justify-between gap-2 rounded-full border border-white/10 bg-ink-950/75 px-3 py-2 shadow-2xl shadow-black/20 backdrop-blur-xl sm:gap-3 sm:px-5 sm:py-3">
+        <nav
+          className={`relative mx-auto flex max-w-7xl items-center justify-between gap-2 rounded-full border px-3 py-2 shadow-black/25 ring-1 ring-inset ring-white/[0.06] backdrop-blur-xl transition-[border-color,box-shadow,background-color] duration-500 sm:gap-3 sm:px-5 sm:py-3 ${
+            elevated
+              ? "border-white/14 bg-ink-950/82 shadow-[0_14px_50px_-24px_rgba(0,0,0,0.55)] backdrop-blur-2xl"
+              : "border-white/10 bg-ink-950/72 shadow-2xl backdrop-blur-xl"
+          }`}
+        >
           <a
             href={`/${content.locale}#top`}
             className="relative z-10 flex min-w-0 shrink-0 items-center gap-2 sm:gap-3"
             aria-label="AdLog home"
           >
-            <span className="relative flex size-8 shrink-0 items-center justify-center rounded-full bg-cream-100 text-ink-950 sm:size-9">
-              <span className="absolute inset-0 rounded-full bg-cyan-glow/25 blur-md" />
-              <Sparkles className="relative size-3.5 sm:size-4" />
-            </span>
+            <BrandLogo
+              priority
+              className="relative size-7 shrink-0 sm:size-9"
+              sizes="(max-width: 640px) 28px, 36px"
+            />
             <span className="font-display truncate text-xs font-bold tracking-[-0.02em] sm:text-base">
               AdLog
             </span>
           </a>
-          <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 lg:block">
-            <div className="pointer-events-auto flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] p-1">
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden max-w-[min(100%,calc(100vw-17rem))] -translate-x-1/2 -translate-y-1/2 lg:block xl:max-w-none">
+            <div className="pointer-events-auto flex items-center gap-0.5 overflow-x-auto rounded-full border border-white/10 bg-white/[0.04] p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {navItems.map(([item, target]) => (
                 <a
                   key={target}
                   href={`#${target}`}
-                  className="rounded-full px-4 py-2 text-sm text-cream-100/62 transition hover:bg-white/[0.06] hover:text-cream-100"
+                  className={`shrink-0 whitespace-nowrap rounded-full px-2.5 py-2 text-[13px] transition-colors duration-300 xl:px-4 xl:text-sm ${
+                    activeSection === target
+                      ? "bg-cyan-glow/14 text-cream-100 ring-1 ring-cyan-glow/28"
+                      : "text-cream-100/62 hover:bg-white/[0.06] hover:text-cream-100"
+                  }`}
+                  aria-current={
+                    activeSection === target ? "location" : undefined
+                  }
                 >
                   {item}
                 </a>
@@ -240,13 +426,19 @@ function Navigation({ content }: { content: SiteContent }) {
             aria-label={content.nav.menu}
             initial={{ opacity: 0, x: 28 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.28, ease: EASE_PREMIUM }}
             className="page-px footer-safe-pb absolute inset-y-0 right-0 flex w-[min(100%,21rem)] flex-col border-l border-white/10 bg-ink-900/97 shadow-2xl backdrop-blur-xl"
           >
             <div className="header-safe-pt flex items-center justify-between gap-3 border-b border-white/10 py-4">
-              <span className="font-display text-sm font-semibold text-cream-100">
-                {content.nav.menu}
-              </span>
+              <div className="flex min-w-0 items-center gap-3">
+                <BrandLogo
+                  className="relative size-6 shrink-0"
+                  sizes="24px"
+                />
+                <span className="font-display truncate text-sm font-semibold text-cream-100">
+                  {content.nav.menu}
+                </span>
+              </div>
               <button
                 type="button"
                 className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/12 bg-white/[0.06] text-cream-100"
@@ -261,7 +453,11 @@ function Navigation({ content }: { content: SiteContent }) {
                 <a
                   key={target}
                   href={`#${target}`}
-                  className="rounded-xl px-4 py-3.5 text-base font-medium text-cream-100/85 transition hover:bg-white/[0.06] hover:text-cream-100 active:bg-white/[0.08]"
+                  className={`rounded-xl px-4 py-3.5 text-base font-medium transition-colors duration-300 ${
+                    activeSection === target
+                      ? "bg-cyan-glow/12 text-cyan-glow"
+                      : "text-cream-100/85 hover:bg-white/[0.06] hover:text-cream-100 active:bg-white/[0.08]"
+                  }`}
                   onClick={closeMenu}
                 >
                   {label}
@@ -276,56 +472,76 @@ function Navigation({ content }: { content: SiteContent }) {
 }
 
 function HeroSection({ content }: { content: SiteContent }) {
+  const heroRef = useRef<HTMLElement | null>(null);
+  const tabVisible = useTabVisible();
+  const heroInView = useInView(heroRef, {
+    margin: "-72px 0px -48% 0px",
+    amount: 0.06,
+  });
+  const ambientOn = tabVisible && heroInView;
   const { scrollYProgress } = useScroll();
+  const { scrollYProgress: heroProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
   const y = useTransform(scrollYProgress, [0, 0.22], [0, 90]);
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.35]);
+  const bgParallax = useTransform(heroProgress, [0, 1], [0, 64]);
 
   return (
     <section
+      ref={heroRef}
       id="top"
-      className="page-px relative min-h-screen overflow-hidden pb-16 pt-28 sm:pb-20 sm:pt-36 lg:pb-28 lg:pt-40"
+      className="page-px relative overflow-hidden pb-14 pt-24 sm:pb-16 sm:pt-28 lg:pb-20 lg:pt-32"
     >
-      <HeroBackground />
+      <HeroBackground ambientOn={ambientOn} parallaxY={bgParallax} />
       <motion.div
         style={{ y, opacity }}
-        className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14"
+        className="relative z-10 mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:gap-10 xl:gap-12"
       >
-        <div>
+        <div className="relative flex min-w-0 gap-5 sm:gap-6 lg:gap-7">
+          <div
+            className="motion-safe-lite mt-1 hidden min-h-[9.5rem] w-px shrink-0 rounded-full bg-gradient-to-b from-cyan-glow/70 via-white/20 to-lime-glow/40 opacity-[0.85] shadow-[0_0_24px_rgba(124,231,247,0.35)] sm:mt-1.5 sm:block sm:min-h-[11rem] lg:min-h-[12.5rem]"
+            aria-hidden
+          />
+          <div className="min-w-0 flex-1">
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-glow/90 sm:tracking-[0.28em]"
+            transition={{ duration: 0.62, ease: EASE_PREMIUM }}
+            className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.07] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-glow/95 shadow-[0_0_44px_-10px_rgba(124,231,247,0.45)] backdrop-blur-xl sm:mb-6 sm:px-3.5 sm:py-2 sm:text-xs sm:tracking-[0.24em]"
           >
-            <span className="relative flex size-2">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-cyan-glow opacity-50" />
-              <span className="relative inline-flex size-2 rounded-full bg-cyan-glow" />
-            </span>
+            <span
+              className="relative flex size-2 shrink-0 rounded-full bg-cyan-glow shadow-[0_0_12px_rgba(124,231,247,0.85)] hero-signal-dot"
+              aria-hidden
+            />
             {content.hero.eyebrow}
           </motion.div>
           <motion.h1
-            initial={{ opacity: 0, y: 26 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.82,
-              delay: 0.06,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="font-display text-[clamp(2rem,9vw,4.35rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-cream-100 sm:text-7xl xl:text-[6.45rem]"
+            className="font-display text-[clamp(1.65rem,5.2vw,3rem)] font-semibold leading-[1.08] tracking-[-0.045em] text-cream-100 text-pretty sm:text-[clamp(1.85rem,4vw,3.35rem)] lg:text-5xl xl:text-6xl"
+            initial="hidden"
+            animate="visible"
+            variants={heroTitleStagger}
           >
-            {content.hero.titleBefore}{" "}
-            <span className="aurora-text">{content.hero.titleHighlight}</span>{" "}
-            {content.hero.titleAfter}
+            <motion.span variants={heroTitleLine} className="inline-block">
+              {content.hero.titleBefore}
+            </motion.span>{" "}
+            <motion.span variants={heroTitleLine} className="aurora-text inline-block">
+              {content.hero.titleHighlight}
+            </motion.span>{" "}
+            <motion.span variants={heroTitleLine} className="inline-block">
+              {content.hero.titleAfter}
+            </motion.span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              duration: 0.65,
-              delay: 0.16,
-              ease: [0.22, 1, 0.36, 1],
+              duration: 0.72,
+              delay: 0.34,
+              ease: EASE_PREMIUM,
             }}
-            className="mt-7 max-w-2xl text-base leading-7 text-cream-100/66 sm:text-lg sm:leading-8 md:text-xl"
+            className="mt-6 max-w-xl text-pretty text-[15px] leading-relaxed text-cream-100/[0.68] sm:mt-7 sm:max-w-2xl sm:text-base sm:leading-7 md:text-[17px] md:leading-8"
           >
             {content.hero.subtitle}
           </motion.p>
@@ -333,26 +549,26 @@ function HeroSection({ content }: { content: SiteContent }) {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              duration: 0.65,
-              delay: 0.25,
-              ease: [0.22, 1, 0.36, 1],
+              duration: 0.68,
+              delay: 0.44,
+              ease: EASE_PREMIUM,
             }}
-            className="mt-9 flex w-full max-w-md flex-col gap-3 sm:max-w-none sm:flex-row"
+            className="mt-8 flex w-full max-w-md flex-col gap-2.5 sm:max-w-none sm:flex-row sm:gap-3"
           >
-            <MagneticButton href="#contact">
+            <MagneticButton href="#contact" className="min-h-11 px-5 py-2.5 text-[13px] sm:min-h-12 sm:px-6 sm:py-3 sm:text-sm">
               {content.hero.primaryCta}
             </MagneticButton>
-            <MagneticButton href="#services" variant="secondary">
+            <MagneticButton href="#services" variant="secondary" className="min-h-11 px-5 py-2.5 text-[13px] sm:min-h-12 sm:px-6 sm:py-3 sm:text-sm">
               {content.hero.secondaryCta}
             </MagneticButton>
           </motion.div>
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
               duration: 0.65,
               delay: 0.32,
-              ease: [0.22, 1, 0.36, 1],
+              ease: EASE_PREMIUM,
             }}
             className="mt-10 grid max-w-xl grid-cols-3 gap-2 sm:gap-3"
           >
@@ -369,22 +585,29 @@ function HeroSection({ content }: { content: SiteContent }) {
                 </div>
               </div>
             ))}
-          </motion.div>
+          </motion.div> */}
+          </div>
         </div>
-        <div className="flex flex-col self-stretch">
-          <div className="mb-3 hidden justify-end lg:flex">
+        <div className="relative z-10 flex flex-col self-stretch">
+          <div className="mb-8 hidden justify-end lg:flex">
             <motion.a
               href="#contact"
-              animate={{ scale: [1, 1.13, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="group inline-flex shrink-0 items-center gap-2 rounded-full bg-yellow-glow px-5 py-2.5 text-sm font-semibold text-ink-950 transition hover:brightness-110 sm:gap-2.5 sm:px-6 sm:py-3 sm:text-base"
+              animate={
+                ambientOn ? { scale: [1, 1.06, 1] } : { scale: 1 }
+              }
+              transition={
+                ambientOn
+                  ? { duration: 2.6, repeat: Infinity, ease: EASE_BREATH }
+                  : { duration: 0.35, ease: EASE_PREMIUM }
+              }
+              className="group inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-semibold text-ink-950 transition hover:brightness-110 sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
             >
               {content.nav.cta}
-              <ChevronRight className="size-3.5 transition-transform group-hover:translate-x-0.5 sm:size-4" />
+              <ChevronRight className="size-3 transition-transform group-hover:translate-x-0.5 sm:size-3.5" />
             </motion.a>
           </div>
           <div className="flex flex-1 items-center">
-            <HeroDashboard content={content} />
+            <HeroDashboard ambientOn={ambientOn} content={content} />
           </div>
         </div>
       </motion.div>
@@ -392,10 +615,39 @@ function HeroSection({ content }: { content: SiteContent }) {
   );
 }
 
-function HeroBackground() {
+function HeroBackground({
+  parallaxY,
+  ambientOn,
+}: {
+  parallaxY: MotionValue<number>;
+  ambientOn: boolean;
+}) {
+  const [particleCount, setParticleCount] = useState(12);
+
+  useEffect(() => {
+    const mqNarrow = window.matchMedia("(max-width: 767px)");
+    const mqMid = window.matchMedia("(max-width: 1024px)");
+    const sync = () => {
+      if (mqNarrow.matches) {
+        setParticleCount(5);
+      } else if (mqMid.matches) {
+        setParticleCount(9);
+      } else {
+        setParticleCount(12);
+      }
+    };
+    sync();
+    mqNarrow.addEventListener("change", sync);
+    mqMid.addEventListener("change", sync);
+    return () => {
+      mqNarrow.removeEventListener("change", sync);
+      mqMid.removeEventListener("change", sync);
+    };
+  }, []);
+
   const particles = useMemo(
     () =>
-      Array.from({ length: 14 }, (_, index) => ({
+      Array.from({ length: particleCount }, (_, index) => ({
         id: index,
         left: `${(index * 37) % 100}%`,
         top: `${(index * 53) % 100}%`,
@@ -403,23 +655,33 @@ function HeroBackground() {
         delay: (index % 6) * 0.4,
         duration: 9 + (index % 4),
       })),
-    [],
+    [particleCount],
   );
 
   return (
-    <div className="absolute inset-0">
+    <motion.div style={{ y: parallaxY }} className="absolute inset-0">
       <div className="orbital-grid absolute inset-0 opacity-55" />
       <motion.div
-        animate={{ scale: [1, 1.08, 1] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -left-40 top-10 size-[28rem] rounded-full bg-teal-700/30 blur-3xl"
+        animate={ambientOn ? { scale: [1, 1.06, 1] } : { scale: 1 }}
+        transition={
+          ambientOn
+            ? { duration: 22, repeat: Infinity, ease: EASE_BREATH }
+            : { duration: 0.45, ease: EASE_PREMIUM }
+        }
+        className="absolute -left-32 top-10 size-[22rem] rounded-full bg-teal-700/30 blur-3xl"
       />
       <motion.div
-        animate={{ x: [0, -36, 0], y: [0, 28, 0] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute right-0 top-0 size-[24rem] rounded-full bg-mist-300/12 blur-3xl"
+        animate={
+          ambientOn ? { x: [0, -28, 0], y: [0, 22, 0] } : { x: 0, y: 0 }
+        }
+        transition={
+          ambientOn
+            ? { duration: 22, repeat: Infinity, ease: EASE_BREATH }
+            : { duration: 0.45, ease: EASE_PREMIUM }
+        }
+        className="absolute right-0 top-0 size-[19rem] rounded-full bg-mist-300/12 blur-3xl"
       />
-      <div className="absolute left-1/2 top-1/2 size-[40rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-glow/10" />
+      <div className="absolute left-1/2 top-1/2 size-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-glow/10" />
       {particles.map((particle) => (
         <motion.span
           key={particle.id}
@@ -430,70 +692,90 @@ function HeroBackground() {
             width: particle.size,
             height: particle.size,
           }}
-          animate={{ y: [-10, 10, -10], opacity: [0.16, 0.58, 0.16] }}
-          transition={{
-            duration: particle.duration,
-            delay: particle.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          animate={
+            ambientOn
+              ? { y: [-10, 10, -10], opacity: [0.16, 0.58, 0.16] }
+              : { y: 0, opacity: 0.35 }
+          }
+          transition={
+            ambientOn
+              ? {
+                  duration: particle.duration,
+                  delay: particle.delay,
+                  repeat: Infinity,
+                  ease: EASE_BREATH,
+                }
+              : { duration: 0.4, ease: EASE_PREMIUM }
+          }
         />
       ))}
-    </div>
+    </motion.div>
   );
 }
 
-function HeroDashboard({ content }: { content: SiteContent }) {
+function HeroDashboard({
+  content,
+  ambientOn,
+}: {
+  content: SiteContent;
+  ambientOn: boolean;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, x: 34, rotateX: 8, rotateY: -10 }}
       animate={{ opacity: 1, x: 0, rotateX: 0, rotateY: 0 }}
-      transition={{ duration: 0.78, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
-      className="relative mx-auto w-full max-w-[37rem] perspective-[1200px] max-lg:mt-4"
+      transition={{ duration: 0.82, delay: 0.22, ease: EASE_PREMIUM }}
+      className="relative mx-auto w-full max-w-[31rem] perspective-[1200px] max-lg:mt-3"
     >
       <motion.div
-        animate={{ y: [0, -8, 0] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-        className="glass-panel relative overflow-hidden rounded-[1.65rem] p-3 sm:rounded-[2.5rem] sm:p-5"
+        animate={ambientOn ? { y: [0, -8, 0] } : { y: 0 }}
+        transition={
+          ambientOn
+            ? { duration: 7.5, repeat: Infinity, ease: EASE_BREATH }
+            : { duration: 0.45, ease: EASE_PREMIUM }
+        }
+        className="glass-panel relative overflow-hidden rounded-[1.35rem] p-2.5 sm:rounded-[2rem] sm:p-4"
       >
         <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-cyan-glow/70 to-transparent" />
-        <div className="rounded-[1.35rem] border border-white/10 bg-ink-950/70 p-3 sm:rounded-[2rem] sm:p-4">
-          <div className="mb-5 flex items-center justify-between">
+        <div className="rounded-[1.15rem] border border-white/10 bg-ink-950/70 p-2.5 sm:rounded-[1.65rem] sm:p-3.5">
+          <div className="mb-4 flex items-center justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-cream-100/40">
+              <p className="text-[10px] uppercase tracking-[0.22em] text-cream-100/40 sm:text-xs sm:tracking-[0.24em]">
                 {content.hero.dashboardEyebrow}
               </p>
-              <h3 className="mt-1 font-display text-xl font-semibold tracking-[-0.04em] text-cream-100">
+              <h3 className="mt-0.5 font-display text-base font-semibold tracking-[-0.035em] text-cream-100 sm:text-lg">
                 {content.hero.dashboardTitle}
               </h3>
             </div>
-            <div className="rounded-full border border-cyan-glow/25 bg-cyan-glow/10 px-3 py-1 text-xs text-cyan-glow">
+            <div className="rounded-full border border-cyan-glow/25 bg-cyan-glow/10 px-2.5 py-0.5 text-[11px] text-cyan-glow sm:px-3 sm:py-1 sm:text-xs">
               {content.hero.live}
             </div>
           </div>
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-2 sm:grid-cols-3 sm:gap-2.5">
             {content.hero.dashboardStats.map(([label, value, helper]) => (
               <div
                 key={label}
-                className="rounded-2xl border border-white/10 bg-white/[0.045] p-3"
+                className="rounded-xl border border-white/10 bg-white/[0.045] p-2.5 sm:rounded-2xl sm:p-3"
               >
-                <p className="text-xs text-cream-100/45">{label}</p>
-                <p className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em] text-cream-100">
+                <p className="text-[11px] text-cream-100/45 sm:text-xs">{label}</p>
+                <p className="mt-1.5 font-display text-lg font-semibold tracking-[-0.035em] text-cream-100 sm:mt-2 sm:text-xl">
                   {value}
                 </p>
-                <p className="mt-1 text-xs text-cyan-glow/70">{helper}</p>
+                <p className="mt-0.5 text-[11px] text-cyan-glow/70 sm:mt-1 sm:text-xs">{helper}</p>
               </div>
             ))}
           </div>
-          <div className="mt-4 grid gap-3 sm:grid-cols-[1.2fr_0.8fr]">
-            <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4">
-              <div className="mb-4 flex items-center justify-between">
-                <p className="text-sm font-medium text-cream-100/78">
+          <div className="mt-3 grid gap-2.5 sm:grid-cols-[1.2fr_0.8fr] sm:mt-3.5">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-3 sm:rounded-3xl sm:p-3.5">
+              <div className="mb-3 flex items-center justify-between sm:mb-3.5">
+                <p className="text-xs font-medium text-cream-100/78 sm:text-sm">
                   {content.hero.acquisition}
                 </p>
-                <p className="text-xs text-cyan-glow">+22.8%</p>
+                <p className="text-[11px] text-cyan-glow sm:text-xs">
+                  {content.hero.acquisitionDelta}
+                </p>
               </div>
-              <div className="mb-4 flex min-h-28 items-end gap-1.5 overflow-x-auto pb-1 sm:h-32 sm:gap-2">
+              <div className="mb-3 flex min-h-[6.25rem] items-end gap-1 overflow-x-auto pb-1 sm:min-h-28 sm:gap-1.5">
                 {[42, 58, 46, 72, 64, 86, 78, 96].map((height, index) => (
                   <motion.div
                     key={`${height}-${index}`}
@@ -503,23 +785,27 @@ function HeroDashboard({ content }: { content: SiteContent }) {
                     transition={{
                       duration: 0.8,
                       delay: index * 0.035,
-                      ease: [0.22, 1, 0.36, 1],
+                      ease: EASE_PREMIUM,
                     }}
                     className="flex-1 rounded-full bg-gradient-to-t from-teal-700 via-cyan-glow/65 to-cream-100 shadow-[0_0_18px_-8px_rgba(124,231,247,0.8)]"
                   />
                 ))}
               </div>
             </div>
-            <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4">
-              <p className="text-sm font-medium text-cream-100/78">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-3 sm:rounded-3xl sm:p-3.5">
+              <p className="text-xs font-medium text-cream-100/78 sm:text-sm">
                 {content.hero.aiRouting}
               </p>
-              <div className="relative mt-5 flex aspect-square items-center justify-center rounded-full border border-white/10 bg-ink-900/60">
-                <span className="absolute size-28 rounded-full border border-cyan-glow/25" />
-                <span className="absolute size-20 rounded-full border border-mist-300/25" />
-                <span className="absolute h-[42%] w-px origin-bottom bg-gradient-to-t from-cyan-glow to-transparent [animation:spin_12s_linear_infinite]" />
-                <div className="relative flex size-16 items-center justify-center rounded-full bg-cream-100 text-ink-950 shadow-[0_0_35px_-10px_rgba(124,231,247,1)]">
-                  <Sparkles className="size-6" />
+              <div className="relative mt-4 flex aspect-square max-h-[11rem] items-center justify-center rounded-full border border-white/10 bg-ink-900/60 sm:mt-4">
+                <span className="absolute size-[7.25rem] rounded-full border border-cyan-glow/25 sm:size-28" />
+                <span className="absolute size-[5.25rem] rounded-full border border-mist-300/25 sm:size-20" />
+                <span className="needle-spin absolute h-[42%] w-px origin-bottom bg-gradient-to-t from-cyan-glow to-transparent" />
+                <div className="relative flex size-14 items-center justify-center rounded-full bg-cream-100 text-ink-950 shadow-[0_0_35px_-10px_rgba(124,231,247,1)] sm:size-16">
+                  <BrandLogo
+                    className="relative size-[2.35rem] shrink-0 sm:size-11"
+                    sizes="44px"
+                    imgClassName="object-contain object-center p-1"
+                  />
                 </div>
               </div>
             </div>
@@ -527,69 +813,39 @@ function HeroDashboard({ content }: { content: SiteContent }) {
         </div>
       </motion.div>
       <motion.div
-        animate={{ y: [0, 12, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="glass-panel absolute -left-4 top-16 hidden w-44 rounded-3xl p-4 shadow-premium sm:block"
+        animate={ambientOn ? { y: [0, 12, 0] } : { y: 0 }}
+        transition={
+          ambientOn
+            ? { duration: 8.5, repeat: Infinity, ease: EASE_BREATH }
+            : { duration: 0.45, ease: EASE_PREMIUM }
+        }
+        className="glass-panel absolute -left-3 top-14 hidden w-[10.25rem] rounded-2xl p-3 shadow-premium sm:block"
       >
-        <p className="text-xs uppercase tracking-[0.2em] text-cyan-glow/75">
+        <p className="text-[10px] uppercase tracking-[0.18em] text-cyan-glow/75 sm:text-xs sm:tracking-[0.2em]">
           {content.hero.botFlow}
         </p>
-        <p className="mt-2 text-sm text-cream-100/72">
+        <p className="mt-1.5 text-xs text-cream-100/72 sm:mt-2 sm:text-sm">
           {content.hero.botFlowDescription}
         </p>
       </motion.div>
       <motion.div
-        animate={{ y: [0, -12, 0] }}
-        transition={{ duration: 8.5, repeat: Infinity, ease: "easeInOut" }}
-        className="glass-panel absolute -right-3 bottom-10 hidden w-48 rounded-3xl p-4 shadow-premium md:block"
+        animate={ambientOn ? { y: [0, -12, 0] } : { y: 0 }}
+        transition={
+          ambientOn
+            ? { duration: 9, repeat: Infinity, ease: EASE_BREATH }
+            : { duration: 0.45, ease: EASE_PREMIUM }
+        }
+        className="glass-panel absolute -right-2 bottom-8 hidden w-44 rounded-2xl p-3 shadow-premium md:block"
       >
-        <p className="text-xs uppercase tracking-[0.2em] text-cyan-glow/75">
+        <p className="text-[10px] uppercase tracking-[0.18em] text-cyan-glow/75 sm:text-xs sm:tracking-[0.2em]">
           {content.hero.launchReady}
         </p>
-        <div className="mt-3 flex items-center gap-2 text-sm text-cream-100/75">
-          <CheckCircle2 className="size-4 text-cyan-glow" />
+        <div className="mt-2 flex items-center gap-1.5 text-xs text-cream-100/75 sm:mt-2.5 sm:gap-2 sm:text-sm">
+          <CheckCircle2 className="size-3.5 text-cyan-glow sm:size-4" />
           {content.hero.ciHealthy}
         </div>
       </motion.div>
     </motion.div>
-  );
-}
-
-function TrustSection({ content }: { content: SiteContent }) {
-  return (
-    <section id="benefits" className="page-px relative py-20 sm:py-32">
-      <div className="mx-auto max-w-7xl">
-        <SectionTitle {...content.sections.benefits} />
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.16 }}
-          className="grid gap-5 md:grid-cols-2 xl:grid-cols-3"
-        >
-          {content.benefits.map((benefit) => (
-            <TiltCard
-              key={benefit.title}
-              variants={cardReveal}
-              className="group rounded-[1.5rem] p-5 sm:rounded-[2rem] sm:p-6 md:p-7"
-            >
-              <div className="mb-8 flex items-center justify-between">
-                <div className="flex size-12 items-center justify-center rounded-2xl bg-cyan-glow/10 text-cyan-glow ring-1 ring-cyan-glow/20 transition group-hover:scale-105 group-hover:bg-cyan-glow/15">
-                  <benefit.icon className="size-5" />
-                </div>
-                <ArrowRight className="size-5 text-cream-100/20 transition group-hover:translate-x-1 group-hover:text-cyan-glow" />
-              </div>
-              <h3 className="font-display text-xl font-semibold tracking-[-0.03em] text-cream-100">
-                {benefit.title}
-              </h3>
-              <p className="mt-3 leading-7 text-cream-100/58">
-                {benefit.description}
-              </p>
-            </TiltCard>
-          ))}
-        </motion.div>
-      </div>
-    </section>
   );
 }
 
@@ -599,6 +855,12 @@ function ServicesSection({ content }: { content: SiteContent }) {
       id="services"
       className="page-px relative overflow-hidden py-20 sm:py-32"
     >
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 flex justify-center px-6"
+        aria-hidden
+      >
+        <div className="section-divider-fade w-full max-w-4xl" />
+      </div>
       <div className="absolute inset-x-0 top-24 h-72 bg-gradient-to-r from-transparent via-teal-700/16 to-transparent blur-3xl" />
       <div className="relative mx-auto max-w-7xl">
         <SectionTitle {...content.sections.services} />
@@ -614,11 +876,12 @@ function ServicesSection({ content }: { content: SiteContent }) {
               key={service.title}
               variants={cardReveal}
               whileHover={{ y: -6 }}
-              className="glass-panel gradient-border group relative min-h-0 overflow-hidden rounded-[1.5rem] p-5 sm:min-h-[16rem] sm:rounded-[2rem] sm:p-6"
+              transition={{ type: "spring", stiffness: 520, damping: 34 }}
+              className="glass-panel card-rim-hover group relative min-h-0 overflow-hidden rounded-[1.5rem] p-5 sm:min-h-[16rem] sm:rounded-[2rem] sm:p-6"
             >
               <div className="absolute -right-10 -top-10 size-28 rounded-full bg-cyan-glow/10 blur-2xl transition duration-500 group-hover:bg-cyan-glow/18" />
               <div className="relative flex h-full flex-col">
-                <div className="flex items-center justify-between">
+                <div className="flex shrink-0 items-center justify-between">
                   <div className="flex size-13 items-center justify-center rounded-2xl bg-white/[0.06] text-cyan-glow ring-1 ring-white/10">
                     <service.icon className="size-6" />
                   </div>
@@ -626,14 +889,15 @@ function ServicesSection({ content }: { content: SiteContent }) {
                     0{index + 1}
                   </span>
                 </div>
-                <div className="mt-auto pt-12 sm:pt-16">
-                  <h3 className="font-display text-xl font-semibold tracking-[-0.04em] text-cream-100 sm:text-2xl">
-                    {service.title}
-                  </h3>
-                  <p className="mt-3 leading-7 text-cream-100/58">
-                    {service.description}
-                  </p>
-                </div>
+                <h3
+                  title={service.title}
+                  className="mt-12 line-clamp-1 font-display text-xl font-semibold tracking-[-0.04em] text-cream-100 sm:mt-16 sm:text-2xl"
+                >
+                  {service.title}
+                </h3>
+                <p className="mt-3 min-h-0 flex-1 leading-7 text-cream-100/58">
+                  {service.description}
+                </p>
               </div>
             </motion.article>
           ))}
@@ -644,72 +908,59 @@ function ServicesSection({ content }: { content: SiteContent }) {
 }
 
 function TechnologiesSection({ content }: { content: SiteContent }) {
-  const repeatedGroups = [...content.techGroups, ...content.techGroups];
-
   return (
-    <section className="page-px relative overflow-hidden py-20 sm:py-32">
-      <div className="mx-auto max-w-7xl">
+    <section
+      id="technologies"
+      className="page-px relative overflow-x-hidden py-20 sm:py-32"
+    >
+      <div
+        className="pointer-events-none absolute inset-x-0 top-24 h-64 bg-gradient-to-r from-transparent via-cyan-glow/[0.06] to-transparent blur-3xl"
+        aria-hidden
+      />
+      <div className="relative mx-auto max-w-7xl">
         <SectionTitle {...content.sections.technologies} />
-      </div>
-
-      <div className="mx-auto mt-6 grid max-w-7xl gap-3 md:hidden">
-        {content.techGroups.map((group) => (
-          <div
-            key={group.label}
-            className="glass-panel rounded-[1.35rem] p-4 sm:rounded-[2rem] sm:p-5"
-          >
-            <div className="mb-4 flex items-center gap-3">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-cyan-glow/10 text-cyan-glow">
-                <group.icon className="size-5" />
-              </div>
-              <h3 className="font-display text-lg font-semibold tracking-[-0.03em] sm:text-xl">
-                {group.label}
-              </h3>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {group.items.map((item) => (
-                <span
-                  key={item}
-                  className="rounded-full border border-white/10 bg-white/[0.045] px-3 py-2 text-xs text-cream-100/75 sm:text-sm"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="relative mx-auto hidden max-w-[100rem] overflow-hidden md:block">
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-ink-950 to-transparent sm:w-32" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-ink-950 to-transparent sm:w-32" />
-        <div className="marquee-track flex w-max gap-5">
-          {repeatedGroups.map((group, index) => (
-            <div
-              key={`${group.label}-${index}`}
-              className="glass-panel group min-w-[18rem] rounded-[2rem] p-5 transition hover:-translate-y-1 hover:border-cyan-glow/35"
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          className="mx-auto mt-10 grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-3"
+        >
+          {content.techGroups.map((group, index) => (
+            <motion.article
+              key={group.label}
+              variants={cardReveal}
+              whileHover={{ y: -5 }}
+              transition={{ type: "spring", stiffness: 440, damping: 30 }}
+              className="glass-panel card-rim-hover group relative flex min-h-0 flex-col overflow-hidden rounded-[1.5rem] p-4 sm:min-h-0 sm:rounded-[1.75rem] sm:p-5 xl:p-6"
             >
-              <div className="mb-5 flex items-center gap-3">
-                <div className="flex size-11 items-center justify-center rounded-2xl bg-cyan-glow/10 text-cyan-glow">
-                  <group.icon className="size-5" />
+              <div className="pointer-events-none absolute -right-12 -top-12 size-36 rounded-full bg-cyan-glow/10 blur-2xl transition duration-500 group-hover:bg-cyan-glow/16" />
+              <div className="relative flex items-start justify-between gap-3 border-b border-white/[0.08] pb-3 sm:pb-4">
+                <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-glow/18 to-white/[0.04] text-cyan-glow ring-1 ring-white/10 sm:size-11">
+                    <group.icon className="size-[1.05rem] sm:size-5" />
+                  </div>
+                  <h3 className="font-display text-base font-semibold leading-snug tracking-[-0.03em] text-cream-100 sm:text-lg">
+                    {group.label}
+                  </h3>
                 </div>
-                <h3 className="font-display text-xl font-semibold tracking-[-0.03em]">
-                  {group.label}
-                </h3>
+                <span className="shrink-0 font-display text-[10px] tabular-nums text-cream-100/22 sm:text-[11px]">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="relative mt-3 flex flex-wrap gap-1.5 sm:mt-4 sm:gap-2">
                 {group.items.map((item) => (
                   <span
                     key={item}
-                    className="rounded-full border border-white/10 bg-white/[0.045] px-3 py-2 text-sm text-cream-100/68 transition group-hover:border-cyan-glow/20 group-hover:text-cream-100"
+                    className="rounded-full border border-white/12 bg-white/[0.065] px-2 py-1 text-[11px] font-medium leading-snug text-cream-100/82 transition duration-300 hover:-translate-y-px hover:border-cyan-glow/30 hover:bg-cyan-glow/[0.08] hover:text-cream-100 sm:px-2.5 sm:py-1.5 sm:text-xs"
                   >
                     {item}
                   </span>
                 ))}
               </div>
-            </div>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -729,33 +980,62 @@ function ProcessSection({ content }: { content: SiteContent }) {
             viewport={{ once: true, amount: 0.12 }}
             className="space-y-5"
           >
-            {content.processSteps.map((step, index) => (
-              <motion.div
-                key={step.title}
-                variants={cardReveal}
-                className={`relative grid gap-5 md:grid-cols-2 ${index % 2 === 0 ? "" : "md:[&>div:first-child]:col-start-2"}`}
-              >
-                <div className="glass-panel gradient-border rounded-[1.35rem] p-5 sm:rounded-[2rem] sm:p-6">
+            {content.processSteps.map((step, index) => {
+              const stepLabel = (
+                <p className="text-xs uppercase tracking-[0.24em] text-cyan-glow/90 sm:text-sm md:text-base">
+                  {content.processStepWord} {index + 1}
+                </p>
+              );
+              const stepLabelCell = (
+                <div
+                  className={`flex items-center py-1 md:min-h-[7rem] md:py-0 ${
+                    index % 2 === 0
+                      ? "order-1 justify-start md:order-none md:justify-start md:pl-4 lg:pl-10"
+                      : "order-1 justify-end text-right md:order-none md:justify-end md:pr-4 lg:pr-10"
+                  }`}
+                >
+                  {stepLabel}
+                </div>
+              );
+              const cardCell = (
+                <div className="glass-panel card-rim-hover order-2 rounded-[1.35rem] p-5 sm:rounded-[2rem] sm:p-6 md:order-none">
                   <div className="mb-5 flex items-center gap-4">
-                    <div className="relative flex size-12 items-center justify-center rounded-2xl bg-cyan-glow/10 text-cyan-glow ring-1 ring-cyan-glow/20">
-                      <span className="absolute size-full rounded-2xl bg-cyan-glow/20 [animation:pulse-ring_3.2s_ease-out_infinite]" />
+                    <div className="relative flex size-12 shrink-0 items-center justify-center rounded-2xl bg-cyan-glow/10 text-cyan-glow ring-1 ring-cyan-glow/20">
+                      <span className="pulse-ring-loop absolute size-full rounded-2xl bg-cyan-glow/20" />
                       <step.icon className="relative size-5" />
                     </div>
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-cream-100/36">
-                        {content.processStepWord} {index + 1}
-                      </p>
-                      <h3 className="font-display text-2xl font-semibold tracking-[-0.04em] text-cream-100">
-                        {step.title}
-                      </h3>
-                    </div>
+                    <h3 className="font-display text-2xl font-semibold tracking-[-0.04em] text-cream-100">
+                      {step.title}
+                    </h3>
                   </div>
                   <p className="leading-8 text-cream-100/58">
                     {step.description}
                   </p>
                 </div>
-              </motion.div>
-            ))}
+              );
+
+              return (
+                <motion.div
+                  key={step.title}
+                  variants={
+                    index % 2 === 0 ? processLaneFromLeft : processLaneFromRight
+                  }
+                  className="relative grid gap-4 md:grid-cols-2 md:items-center md:gap-5"
+                >
+                  {index % 2 === 0 ? (
+                    <>
+                      {cardCell}
+                      {stepLabelCell}
+                    </>
+                  ) : (
+                    <>
+                      {stepLabelCell}
+                      {cardCell}
+                    </>
+                  )}
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </div>
@@ -763,6 +1043,7 @@ function ProcessSection({ content }: { content: SiteContent }) {
   );
 }
 
+/* Results / showcase section — commented out (restore with `<ShowcaseSection content={content} />` above)
 function ShowcaseSection({ content }: { content: SiteContent }) {
   return (
     <section className="page-px relative overflow-hidden py-20 sm:py-32">
@@ -811,7 +1092,7 @@ function ShowcaseSection({ content }: { content: SiteContent }) {
                           transition={{
                             duration: 0.8,
                             delay: index * 0.05,
-                            ease: [0.22, 1, 0.36, 1],
+                            ease: EASE_PREMIUM,
                           }}
                           className="h-full rounded-full bg-gradient-to-r from-teal-700 via-cyan-glow to-cream-100"
                         />
@@ -833,7 +1114,7 @@ function ShowcaseSection({ content }: { content: SiteContent }) {
               <motion.article
                 key={showcase.title}
                 variants={cardReveal}
-                className={`glass-panel gradient-border group rounded-[1.5rem] p-5 sm:rounded-[2rem] sm:p-6 ${index === 4 ? "sm:col-span-2" : ""}`}
+                className={`glass-panel group rounded-[1.5rem] p-5 sm:rounded-[2rem] sm:p-6 ${index === 4 ? "sm:col-span-2" : ""}`}
               >
                 <div className="mb-7 flex items-center justify-between">
                   <div className="flex size-12 items-center justify-center rounded-2xl bg-cyan-glow/10 text-cyan-glow">
@@ -862,6 +1143,7 @@ function ShowcaseSection({ content }: { content: SiteContent }) {
     </section>
   );
 }
+*/
 
 function ContactSection({ content }: { content: SiteContent }) {
   const [status, setStatus] = useState<
@@ -934,6 +1216,14 @@ function ContactSection({ content }: { content: SiteContent }) {
             viewport={{ once: true, amount: 0.2 }}
             className="space-y-5"
           >
+            <div className="glass-panel rounded-[2rem] p-6">
+              <p className="text-sm uppercase tracking-[0.24em] text-cyan-glow/70">
+                {content.contact.trustEyebrow}
+              </p>
+              <p className="mt-4 text-2xl font-semibold tracking-[-0.04em] text-cream-100">
+                {content.contact.trustText}
+              </p>
+            </div>
             {content.contact.cards.map((card) => (
               <a
                 key={card.title}
@@ -951,14 +1241,6 @@ function ContactSection({ content }: { content: SiteContent }) {
                 </div>
               </a>
             ))}
-            <div className="glass-panel rounded-[2rem] p-6">
-              <p className="text-sm uppercase tracking-[0.24em] text-cyan-glow/70">
-                {content.contact.trustEyebrow}
-              </p>
-              <p className="mt-4 text-2xl font-semibold tracking-[-0.04em] text-cream-100">
-                {content.contact.trustText}
-              </p>
-            </div>
           </motion.aside>
           <motion.form
             onSubmit={handleSubmit}
@@ -1037,7 +1319,7 @@ function ContactSection({ content }: { content: SiteContent }) {
                 <Send className="relative size-4 transition-transform group-hover:translate-x-1" />
               </button>
               <a
-                href="mailto:adlog.agency@gmail.com?subject=Schedule%20a%20Call"
+                href="mailto:adlog1agency@gmail.com?subject=Schedule%20a%20Call"
                 className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-7 py-4 text-sm font-semibold text-cream-100 transition hover:border-cyan-glow/35 hover:bg-white/[0.09] sm:min-h-0 sm:w-auto"
               >
                 {content.contact.secondaryButton}
@@ -1062,6 +1344,92 @@ function ContactSection({ content }: { content: SiteContent }) {
             ) : null}
           </motion.form>
         </div>
+      </div>
+    </section>
+  );
+}
+
+function FaqSection({ content }: { content: SiteContent }) {
+  return (
+    <section
+      id="faq"
+      className="page-px relative border-t border-white/[0.06] py-20 sm:py-32"
+    >
+      <div className="relative mx-auto max-w-7xl">
+        <SectionTitle {...content.sections.faq} />
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.08 }}
+          className="mx-auto max-w-3xl space-y-3"
+        >
+          {content.faq.map((item) => (
+            <motion.div key={item.question} variants={cardReveal}>
+              <details className="group glass-panel rounded-[1.35rem] px-5 py-1 sm:rounded-[1.75rem] sm:px-6">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 pr-1 text-left font-display text-base font-semibold tracking-[-0.02em] text-cream-100 sm:text-lg [&::-webkit-details-marker]:hidden">
+                  {item.question}
+                  <ChevronRight
+                    aria-hidden
+                    className="size-5 shrink-0 text-cyan-glow/70 transition-transform duration-300 group-open:rotate-90"
+                  />
+                </summary>
+                <p className="border-t border-white/[0.08] pb-4 pt-3 text-[15px] leading-7 text-cream-100/58 sm:text-base">
+                  {item.answer}
+                </p>
+              </details>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function PaymentSection({ content }: { content: SiteContent }) {
+  return (
+    <section
+      id="payment"
+      className="page-px relative border-t border-white/[0.06] py-20 sm:py-32"
+    >
+      <div className="relative mx-auto max-w-7xl">
+        <SectionTitle {...content.sections.payment} />
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          className="mx-auto max-w-3xl space-y-4"
+        >
+          {content.payment.milestones.map((milestone, index) => (
+            <motion.div
+              key={milestone.title}
+              variants={cardReveal}
+              className="glass-panel card-rim-hover flex gap-4 rounded-[1.35rem] p-5 sm:gap-5 sm:rounded-[1.75rem] sm:p-6"
+            >
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-cyan-glow/10 font-display text-sm font-semibold text-cyan-glow ring-1 ring-cyan-glow/25">
+                {index + 1}
+              </span>
+              <div>
+                <h3 className="font-display text-lg font-semibold tracking-[-0.03em] text-cream-100 sm:text-xl">
+                  {milestone.title}
+                </h3>
+                <p className="mt-2 text-[15px] leading-7 text-cream-100/58 sm:text-base">
+                  {milestone.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+        <motion.p
+          variants={sectionReveal}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="mx-auto mt-10 max-w-3xl text-center text-[15px] leading-7 text-cream-100/55 sm:text-lg"
+        >
+          {content.payment.footer}
+        </motion.p>
       </div>
     </section>
   );
@@ -1114,12 +1482,28 @@ function FloatingField({
 }
 
 function FinalCtaSection({ content }: { content: SiteContent }) {
+  const tabVisible = useTabVisible();
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const inView = useInView(sectionRef, { amount: 0.22 });
+  const ambientOn = tabVisible && inView;
+
   return (
-    <section className="page-px relative overflow-hidden py-20 sm:py-32">
+    <section
+      ref={sectionRef}
+      className="page-px relative overflow-hidden py-20 sm:py-32"
+    >
       <div className="absolute inset-0">
         <motion.div
-          animate={{ scale: [1, 1.08, 1], opacity: [0.22, 0.4, 0.22] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          animate={
+            ambientOn
+              ? { scale: [1, 1.06, 1], opacity: [0.18, 0.38, 0.18] }
+              : { scale: 1, opacity: 0.22 }
+          }
+          transition={
+            ambientOn
+              ? { duration: 11, repeat: Infinity, ease: EASE_BREATH }
+              : { duration: 0.5, ease: EASE_PREMIUM }
+          }
           className="absolute left-1/2 top-1/2 size-[36rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-glow/12 blur-3xl"
         />
         <div className="orbital-grid absolute inset-0 opacity-40" />
@@ -1129,11 +1513,15 @@ function FinalCtaSection({ content }: { content: SiteContent }) {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.22 }}
-        className="glass-panel relative mx-auto max-w-5xl overflow-hidden rounded-[1.75rem] px-5 py-12 text-center sm:rounded-[3rem] sm:px-12 sm:py-20"
+        className="glass-panel card-rim-hover relative mx-auto max-w-5xl overflow-hidden rounded-[1.75rem] px-5 py-12 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.07)] sm:rounded-[3rem] sm:px-12 sm:py-20"
       >
         <div className="absolute inset-x-12 top-0 h-px bg-gradient-to-r from-transparent via-cyan-glow/70 to-transparent" />
-        <div className="mx-auto mb-6 flex size-14 items-center justify-center rounded-2xl bg-cyan-glow/10 text-cyan-glow ring-1 ring-cyan-glow/20">
-          <Sparkles className="size-6" />
+        <div className="relative mx-auto mb-6 flex size-[4.5rem] items-center justify-center rounded-2xl bg-cyan-glow/10 ring-1 ring-cyan-glow/20">
+          <BrandLogo
+            className="relative size-[3.25rem] shrink-0"
+            sizes="52px"
+            imgClassName="object-contain object-center p-1.5"
+          />
         </div>
         <h2 className="font-display text-[clamp(1.65rem,6vw,3.75rem)] font-semibold leading-[1.05] tracking-[-0.05em] text-cream-100 sm:text-6xl lg:text-7xl">
           {content.finalCta.heading}
@@ -1158,6 +1546,10 @@ function SiteFooter({ content }: { content: SiteContent }) {
     <footer className="page-px footer-safe-pb border-t border-white/[0.08] pt-12">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 sm:flex-row sm:items-start sm:justify-between sm:gap-12">
         <div className="max-w-md">
+          <BrandLogo
+            className="relative mb-4 inline-block size-14 sm:size-16"
+            sizes="(max-width: 640px) 56px, 64px"
+          />
           <p className="font-display text-base font-semibold text-cream-100">
             AdLog
           </p>

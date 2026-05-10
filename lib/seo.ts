@@ -16,8 +16,8 @@ export function getStructuredData(locale: Locale) {
         "@id": `${siteUrl}/#organization`,
         name: "AdLog",
         url: siteUrl,
-        email: "adlog.agency@gmail.com",
-        sameAs: ["https://t.me/adlog"],
+        email: "adlog1agency@gmail.com",
+        sameAs: ["https://t.me/+j-jwnaeMnyphYjY6"],
         description: content.seo.description
       },
       {

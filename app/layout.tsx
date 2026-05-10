@@ -46,11 +46,15 @@ export const metadata: Metadata = {
       hy: "/hy",
       "x-default": "/en"
     }
+  },
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png"
   }
 };
 
 export const viewport: Viewport = {
-  themeColor: "#061A1F",
+  themeColor: "#051418",
   colorScheme: "dark",
   viewportFit: "cover"
 };

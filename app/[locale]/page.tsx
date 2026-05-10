@@ -47,12 +47,14 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
       title: content.seo.title,
       description: content.seo.description,
       locale: rawLocale === "hy" ? "hy_AM" : "en_US",
-      alternateLocale: rawLocale === "hy" ? ["en_US"] : ["hy_AM"]
+      alternateLocale: rawLocale === "hy" ? ["en_US"] : ["hy_AM"],
+      images: [{ url: "/logo.png", alt: "AdLog" }]
     },
     twitter: {
       card: "summary_large_image",
       title: content.seo.title,
-      description: content.seo.description
+      description: content.seo.description,
+      images: ["/logo.png"]
     },
     robots: {
       index: true,

@@ -55,7 +55,7 @@ export function TiltCard({ children, intensity = 10, className = "", ...props }:
         mouseY.set(50);
       }}
       transition={{ type: "spring", stiffness: 180, damping: 18 }}
-      className={`glass-panel gradient-border ${className}`}
+      className={`glass-panel ${className}`}
       {...props}
     >
       {children}

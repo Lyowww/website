@@ -15,10 +15,58 @@
       "business growth strategy"
     ]
   },
+  "faq": [
+    {
+      "question": "What services do you offer?",
+      "answer": "We provide web development, mobile app development, SEO, content creation, digital marketing, AI solutions, Telegram bot development, automation systems, business strategy, and advertising services."
+    },
+    {
+      "question": "How much does a project cost?",
+      "answer": "Pricing depends on the scope, features, and services required. Every project is customized to your business needs. We focus on offering high-quality solutions at some of the most competitive and affordable rates on the market."
+    },
+    {
+      "question": "How long does a project take?",
+      "answer": "Timelines depend on the project size and priorities. Smaller projects can be completed very quickly, while larger systems require more planning and development time. Fast delivery is one of our main priorities."
+    },
+    {
+      "question": "Do you create custom websites?",
+      "answer": "Yes. Every website is built around your business goals, branding, and target audience. We create modern, responsive, and scalable websites tailored specifically to your needs."
+    },
+    {
+      "question": "Do you build mobile apps?",
+      "answer": "Yes. We develop mobile applications for both iOS and Android with focus on performance, usability, and business growth."
+    },
+    {
+      "question": "What is included in your SEO services?",
+      "answer": "Our SEO services include website optimization, keyword research, technical SEO, content optimization, and strategies to improve search engine visibility and organic traffic."
+    },
+    {
+      "question": "Can you manage marketing and ads for my business?",
+      "answer": "Yes. We manage Google Ads, Meta Ads, branding, content strategy, and growth campaigns designed to attract the right audience and increase conversions."
+    },
+    {
+      "question": "What AI solutions do you offer?",
+      "answer": "We build AI-powered tools, automations, assistants, and integrations that help businesses save time, improve efficiency, and streamline operations."
+    },
+    {
+      "question": "What can a Telegram bot do for my business?",
+      "answer": "Telegram bots can automate customer support, bookings, notifications, lead collection, payments, and many other business processes while improving customer interaction."
+    },
+    {
+      "question": "Do you offer one-time projects or long-term support?",
+      "answer": "Both. We offer one-time services, complete project packages, and ongoing support depending on your business needs."
+    },
+    {
+      "question": "Can I request a custom package?",
+      "answer": "Absolutely. We can combine services into a custom package tailored specifically to your goals, budget, and timeline."
+    }
+  ],
   "nav": {
-    "benefits": "Benefits",
     "services": "Services",
+    "technologies": "Tech stack",
     "process": "Process",
+    "faq": "FAQ",
+    "payment": "Payment",
     "contact": "Contact",
     "start": "Get Free Consultation",
     "menu": "Menu",
@@ -69,6 +117,7 @@
       ]
     ],
     "acquisition": "Acquisition Engine",
+    "acquisitionDelta": "+12.4% WoW",
     "aiRouting": "AI Routing",
     "botFlow": "Bot Flow",
     "botFlowDescription": "Lead captured, qualified, and synced to CRM.",
@@ -89,7 +138,7 @@
     "technologies": {
       "eyebrow": "Technology stack",
       "title": "Modern Tools For Scalable Systems",
-      "description": "We select proven technologies that keep products fast, maintainable, observable, and ready for the next stage of growth."
+      "description": "Layered stacks across UI, APIs, data, mobile, cloud, AI, and growth — chosen for speed, reliability, and room to scale."
     },
     "process": {
       "eyebrow": "How we build",
@@ -102,9 +151,19 @@
       "description": "Every deliverable becomes part of a broader business engine: measurable, automated, integrated, and ready to scale."
     },
     "contact": {
-      "eyebrow": "Start the conversation",
-      "title": "Let’s Turn Your Idea Into Reality",
-      "description": "Share your goals and we will map the best path across product, engineering, AI automation, marketing, and infrastructure."
+      "eyebrow": "",
+      "title": "Contact",
+      "description": ""
+    },
+    "faq": {
+      "eyebrow": "",
+      "title": "FAQ",
+      "description": ""
+    },
+    "payment": {
+      "eyebrow": "",
+      "title": "Payment",
+      "description": "We use a milestone-based payment structure to ensure transparency and smooth project delivery."
     }
   },
   "benefits": [
@@ -192,54 +251,123 @@
       "items": [
         "React",
         "Next.js",
-        "TypeScript"
+        "TypeScript",
+        "Tailwind CSS",
+        "Framer Motion",
+        "TanStack Query",
+        "TanStack Router",
+        "Zustand",
+        "Radix UI",
+        "Vite",
+        "Storybook",
+        "ESLint / Prettier"
       ],
       "icon": "mousePointer2"
     },
     {
-      "label": "Backend",
+      "label": "Backend & APIs",
       "items": [
         "Node.js",
         "NestJS",
-        "Express"
+        "Express",
+        "Fastify",
+        "REST APIs",
+        "GraphQL",
+        "WebSockets",
+        "JWT / OAuth2",
+        "BullMQ",
+        "Rate limiting",
+        "API versioning"
       ],
       "icon": "network"
+    },
+    {
+      "label": "Data & persistence",
+      "items": [
+        "PostgreSQL",
+        "MongoDB",
+        "Redis",
+        "Prisma ORM",
+        "Drizzle ORM",
+        "SQLite (edge)",
+        "Migrations",
+        "Backups",
+        "Full-text search"
+      ],
+      "icon": "layers3"
     },
     {
       "label": "Mobile",
       "items": [
         "React Native",
-        "iOS",
-        "Android"
+        "Expo",
+        "Swift / SwiftUI",
+        "Kotlin / Compose",
+        "Push notifications",
+        "Deep linking",
+        "OTA updates",
+        "App Store / Play Console"
       ],
       "icon": "smartphone"
     },
     {
-      "label": "Infrastructure",
+      "label": "Cloud & DevOps",
       "items": [
         "Docker",
-        "CI/CD",
-        "Cloud Systems"
+        "Kubernetes",
+        "GitHub Actions",
+        "CI/CD pipelines",
+        "AWS",
+        "Google Cloud",
+        "Vercel",
+        "Nginx",
+        "CDN & caching",
+        "Secrets management"
       ],
-      "icon": "serverCog"
+      "icon": "cloudCog"
     },
     {
-      "label": "AI",
+      "label": "Observability & quality",
       "items": [
-        "OpenAI",
-        "AI Agents",
-        "Automation"
-      ],
-      "icon": "sparkles"
-    },
-    {
-      "label": "Marketing",
-      "items": [
-        "SEO",
-        "Google Ads",
-        "Meta Ads"
+        "Sentry",
+        "Structured logging",
+        "OpenTelemetry",
+        "Health checks",
+        "Unit tests",
+        "E2E tests",
+        "Load testing",
+        "Feature flags"
       ],
       "icon": "gauge"
+    },
+    {
+      "label": "AI & automation",
+      "items": [
+        "OpenAI API",
+        "Anthropic Claude",
+        "LangChain",
+        "RAG pipelines",
+        "Embeddings",
+        "Vector stores",
+        "AI agents",
+        "n8n / Make.com",
+        "Workflow orchestration"
+      ],
+      "icon": "brainCircuit"
+    },
+    {
+      "label": "Growth & analytics",
+      "items": [
+        "Google Analytics 4",
+        "Google Tag Manager",
+        "Search Console",
+        "Google Ads",
+        "Meta Ads",
+        "SEO tooling",
+        "Conversion tracking",
+        "Looker Studio"
+      ],
+      "icon": "megaphone"
     }
   ],
   "processSteps": [
@@ -324,14 +452,14 @@
     "cards": [
       {
         "title": "Telegram",
-        "value": "@ecosystemstudio",
-        "href": "https://t.me/",
+        "value": "AdLog Agency",
+        "href": "https://t.me/+j-jwnaeMnyphYjY6",
         "icon": "messageCircle"
       },
       {
         "title": "Email",
-        "value": "hello@ecosystem.studio",
-        "href": "mailto:hello@ecosystem.studio",
+        "value": "adlog1agency@gmail.com",
+        "href": "mailto:adlog1agency@gmail.com",
         "icon": "mail"
       },
       {
@@ -383,6 +511,23 @@
       "email": "Please enter a valid email.",
       "projectDescription": "Tell us a little about the project."
     }
+  },
+  "payment": {
+    "milestones": [
+      {
+        "title": "Prepayment",
+        "description": "Initial payment to begin the project and planning process."
+      },
+      {
+        "title": "Development & Testing",
+        "description": "The project is developed, reviewed, and tested based on agreed requirements."
+      },
+      {
+        "title": "Final Payment",
+        "description": "Remaining balance is paid after results, approval, or final delivery."
+      }
+    ],
+    "footer": "This process helps maintain clear communication, secure workflow, and reliable project execution for both sides."
   },
   "finalCta": {
     "heading": "More Visibility. More Customers. More Growth.",

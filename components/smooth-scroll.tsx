@@ -13,22 +13,34 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     }
 
     const lenis = new Lenis({
-      duration: 0.95,
+      duration: 1.05,
       easing: (time: number) => Math.min(1, 1.001 - Math.pow(2, -10 * time)),
       smoothWheel: true,
       wheelMultiplier: 0.82,
-      allowNestedScroll: true
+      touchMultiplier: 1.85,
+      allowNestedScroll: true,
     });
 
     let frame = 0;
-    const raf = (time: number) => {
+    const loop = (time: number) => {
       lenis.raf(time);
-      frame = requestAnimationFrame(raf);
+      frame = requestAnimationFrame(loop);
     };
 
-    frame = requestAnimationFrame(raf);
+    const pauseIfHidden = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      } else if (!frame) {
+        frame = requestAnimationFrame(loop);
+      }
+    };
+
+    frame = requestAnimationFrame(loop);
+    document.addEventListener("visibilitychange", pauseIfHidden);
 
     return () => {
+      document.removeEventListener("visibilitychange", pauseIfHidden);
       cancelAnimationFrame(frame);
       lenis.destroy();
     };
