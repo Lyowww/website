@@ -377,9 +377,9 @@ function HeroSection({ content }: { content: SiteContent }) {
               href="#contact"
               animate={{ scale: [1, 1.13, 1] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="group inline-flex shrink-0 items-center gap-1.5 rounded-full bg-cream-100 px-3 py-2 text-xs font-semibold text-ink-950 transition hover:bg-white sm:gap-2 sm:px-4 sm:text-sm"
+              className="group inline-flex shrink-0 items-center gap-2 rounded-full bg-yellow-glow px-5 py-2.5 text-sm font-semibold text-ink-950 transition hover:brightness-110 sm:gap-2.5 sm:px-6 sm:py-3 sm:text-base"
             >
-              {content.nav.start}
+              {content.nav.cta}
               <ChevronRight className="size-3.5 transition-transform group-hover:translate-x-0.5 sm:size-4" />
             </motion.a>
           </div>

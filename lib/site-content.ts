@@ -30,6 +30,7 @@ export type SiteContent = {
     start: string;
     menu: string;
     close: string;
+    cta: string;
   };
   processStepWord: string;
   hero: {
@@ -138,7 +139,13 @@ type SiteCopyJson = {
   services: { title: string; description: string; icon: string }[];
   techGroups: { label: string; items: string[]; icon: string }[];
   processSteps: { title: string; description: string; icon: string }[];
-  showcase: { title: string; description: string; metric: string; metricLabel: string; icon: string }[];
+  showcase: {
+    title: string;
+    description: string;
+    metric: string;
+    metricLabel: string;
+    icon: string;
+  }[];
   showcasePanel: SiteContent["showcasePanel"];
   contact: Omit<SiteContent["contact"], "cards"> & {
     cards: { title: string; value: string; href: string; icon: string }[];
@@ -148,11 +155,24 @@ type SiteCopyJson = {
 };
 
 /** Armenian JSON overlay — omit English-canonical rows; merged at runtime with `en.json`. */
-type SiteCopyHyOverlay = Partial<Omit<SiteCopyJson, "benefits" | "services" | "processSteps" | "showcase" | "showcasePanel">> & {
-  benefits?: Array<Partial<Pick<SiteCopyJson["benefits"][number], "description">>>;
-  services?: Array<Partial<Pick<SiteCopyJson["services"][number], "description">>>;
-  processSteps?: Array<Partial<Pick<SiteCopyJson["processSteps"][number], "description">>>;
-  showcase?: Array<Partial<Pick<SiteCopyJson["showcase"][number], "description">>>;
+type SiteCopyHyOverlay = Partial<
+  Omit<
+    SiteCopyJson,
+    "benefits" | "services" | "processSteps" | "showcase" | "showcasePanel"
+  >
+> & {
+  benefits?: Array<
+    Partial<Pick<SiteCopyJson["benefits"][number], "description">>
+  >;
+  services?: Array<
+    Partial<Pick<SiteCopyJson["services"][number], "description">>
+  >;
+  processSteps?: Array<
+    Partial<Pick<SiteCopyJson["processSteps"][number], "description">>
+  >;
+  showcase?: Array<
+    Partial<Pick<SiteCopyJson["showcase"][number], "description">>
+  >;
   showcasePanel?: Partial<Omit<SiteCopyJson["showcasePanel"], "items">>;
 };
 
@@ -161,12 +181,15 @@ type SiteCopyHyOverlay = Partial<Omit<SiteCopyJson, "benefits" | "services" | "p
  * service names, benefit titles, process step titles, showcase titles/icons/metrics, tech stack,
  * and showcase panel item labels always come from `en.json` (single source of truth).
  */
-function mergeHySiteCopy(en: SiteCopyJson, hy: SiteCopyHyOverlay): SiteCopyJson {
+function mergeHySiteCopy(
+  en: SiteCopyJson,
+  hy: SiteCopyHyOverlay,
+): SiteCopyJson {
   const contactMerged = hy.contact
     ? {
         ...en.contact,
         ...hy.contact,
-        cards: hy.contact.cards ?? en.contact.cards
+        cards: hy.contact.cards ?? en.contact.cards,
       }
     : en.contact;
 
@@ -184,19 +207,19 @@ function mergeHySiteCopy(en: SiteCopyJson, hy: SiteCopyHyOverlay): SiteCopyJson 
       ...row,
       ...(hy.benefits?.[i] ?? {}),
       title: row.title,
-      icon: row.icon
+      icon: row.icon,
     })),
     services: en.services.map((row, i) => ({
       ...row,
       ...(hy.services?.[i] ?? {}),
       title: row.title,
-      icon: row.icon
+      icon: row.icon,
     })),
     processSteps: en.processSteps.map((row, i) => ({
       ...row,
       ...(hy.processSteps?.[i] ?? {}),
       title: row.title,
-      icon: row.icon
+      icon: row.icon,
     })),
     showcase: en.showcase.map((row, i) => ({
       ...row,
@@ -204,16 +227,16 @@ function mergeHySiteCopy(en: SiteCopyJson, hy: SiteCopyHyOverlay): SiteCopyJson 
       title: row.title,
       icon: row.icon,
       metric: row.metric,
-      metricLabel: row.metricLabel
+      metricLabel: row.metricLabel,
     })),
     showcasePanel: {
       ...en.showcasePanel,
       ...(hy.showcasePanel ?? {}),
-      items: en.showcasePanel.items
+      items: en.showcasePanel.items,
     },
     contact: contactMerged,
     finalCta: hy.finalCta ?? en.finalCta,
-    footer: hy.footer ?? en.footer
+    footer: hy.footer ?? en.footer,
   };
 }
 
@@ -224,34 +247,34 @@ function hydrateSiteCopy(raw: SiteCopyJson): SiteContent {
     hero: {
       ...raw.hero,
       stats: raw.hero.stats as [string, string][],
-      dashboardStats: raw.hero.dashboardStats as [string, string, string][]
+      dashboardStats: raw.hero.dashboardStats as [string, string, string][],
     },
     benefits: raw.benefits.map((b) => ({
       title: b.title,
       description: b.description,
-      icon: resolveIcon(b.icon)
+      icon: resolveIcon(b.icon),
     })),
     services: raw.services.map((s) => ({
       title: s.title,
       description: s.description,
-      icon: resolveIcon(s.icon)
+      icon: resolveIcon(s.icon),
     })),
     techGroups: raw.techGroups.map((g) => ({
       label: g.label,
       items: g.items,
-      icon: resolveIcon(g.icon)
+      icon: resolveIcon(g.icon),
     })),
     processSteps: raw.processSteps.map((p) => ({
       title: p.title,
       description: p.description,
-      icon: resolveIcon(p.icon)
+      icon: resolveIcon(p.icon),
     })),
     showcase: raw.showcase.map((s) => ({
       title: s.title,
       description: s.description,
       metric: s.metric,
       metricLabel: s.metricLabel,
-      icon: resolveIcon(s.icon)
+      icon: resolveIcon(s.icon),
     })),
     contact: {
       ...raw.contact,
@@ -259,9 +282,9 @@ function hydrateSiteCopy(raw: SiteCopyJson): SiteContent {
         title: c.title,
         value: c.value,
         href: c.href,
-        icon: resolveIcon(c.icon)
-      }))
-    }
+        icon: resolveIcon(c.icon),
+      })),
+    },
   };
 }
 
@@ -271,9 +294,12 @@ export function isLocale(value: string): value is Locale {
 
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://adlog.one";
 
-const copyHyMerged = mergeHySiteCopy(copyEn as SiteCopyJson, copyHyPartial as SiteCopyHyOverlay);
+const copyHyMerged = mergeHySiteCopy(
+  copyEn as SiteCopyJson,
+  copyHyPartial as SiteCopyHyOverlay,
+);
 
 export const contentByLocale: Record<Locale, SiteContent> = {
   en: hydrateSiteCopy(copyEn as SiteCopyJson),
-  hy: hydrateSiteCopy(copyHyMerged)
+  hy: hydrateSiteCopy(copyHyMerged),
 };
