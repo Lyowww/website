@@ -2,7 +2,14 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { useEffect, useId, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 
 type FormDropdownProps = {
   name: string;
@@ -15,8 +22,21 @@ export function FormDropdown({ name, label, options, placeholder }: FormDropdown
   const id = useId();
   const listId = `${id}-list`;
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("");
+  const [moreBelow, setMoreBelow] = useState(false);
+
+  const syncScrollHint = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) {
+      return;
+    }
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    const hasOverflow = scrollHeight > clientHeight + 2;
+    const nearBottom = scrollTop + clientHeight >= scrollHeight - 6;
+    setMoreBelow(hasOverflow && !nearBottom);
+  }, []);
 
   useEffect(() => {
     if (!open) {
@@ -40,6 +60,28 @@ export function FormDropdown({ name, label, options, placeholder }: FormDropdown
       document.removeEventListener("keydown", closeOnEscape);
     };
   }, [open]);
+
+  useLayoutEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    const frame = requestAnimationFrame(() => syncScrollHint());
+    const el = scrollRef.current;
+    const ro = new ResizeObserver(() => syncScrollHint());
+
+    if (el) {
+      ro.observe(el);
+    }
+
+    window.addEventListener("resize", syncScrollHint);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      ro.disconnect();
+      window.removeEventListener("resize", syncScrollHint);
+    };
+  }, [open, options.length, placeholder, syncScrollHint]);
 
   const display = selected || placeholder;
   const displayMuted = !selected;
@@ -80,37 +122,56 @@ export function FormDropdown({ name, label, options, placeholder }: FormDropdown
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute left-0 right-0 z-30 mt-2 max-h-52 overflow-y-auto overscroll-contain rounded-2xl border border-white/12 bg-ink-900/96 py-1 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.85)] backdrop-blur-xl"
+            className="absolute left-0 right-0 z-30 mt-2 overflow-hidden rounded-2xl border border-white/12 bg-ink-900/96 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.85)] backdrop-blur-xl"
           >
-            <button
-              type="button"
-              role="option"
-              aria-selected={selected === ""}
-              className="flex w-full px-4 py-3 text-left text-sm text-cream-100/45 transition hover:bg-white/[0.06] hover:text-cream-100/75"
-              onClick={() => {
-                setSelected("");
-                setOpen(false);
-              }}
+            <div
+              ref={scrollRef}
+              onScroll={syncScrollHint}
+              className="form-dropdown-scroll max-h-[min(12.25rem,50vh)] overflow-y-scroll overscroll-contain py-1 pl-1 pr-0"
             >
-              {placeholder}
-            </button>
-            {options.map((option) => (
               <button
-                key={option}
                 type="button"
                 role="option"
-                aria-selected={selected === option}
-                className={`flex w-full px-4 py-3 text-left text-sm transition hover:bg-white/[0.06] ${
-                  selected === option ? "bg-cyan-glow/10 text-cyan-glow" : "text-cream-100/82"
-                }`}
+                aria-selected={selected === ""}
+                className="flex min-h-11 w-full px-3 py-2.5 text-left text-sm leading-snug text-cream-100/45 transition hover:bg-white/[0.06] hover:text-cream-100/75 sm:px-4 sm:py-3"
                 onClick={() => {
-                  setSelected(option);
+                  setSelected("");
                   setOpen(false);
                 }}
               >
-                {option}
+                {placeholder}
               </button>
-            ))}
+              {options.map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  role="option"
+                  aria-selected={selected === option}
+                  className={`flex min-h-11 w-full px-3 py-2.5 text-left text-sm leading-snug transition hover:bg-white/[0.06] sm:px-4 sm:py-3 ${
+                    selected === option ? "bg-cyan-glow/10 text-cyan-glow" : "text-cream-100/82"
+                  }`}
+                  onClick={() => {
+                    setSelected(option);
+                    setOpen(false);
+                  }}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+            {moreBelow ? (
+              <>
+                <div
+                  className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-11 rounded-b-[inherit] bg-gradient-to-t from-ink-900 from-40% via-ink-900/75 to-transparent"
+                  aria-hidden
+                />
+                <ChevronDown
+                  className="pointer-events-none absolute bottom-1 left-1/2 z-[2] size-4 -translate-x-1/2 text-cyan-glow/55"
+                  aria-hidden
+                  strokeWidth={2.25}
+                />
+              </>
+            ) : null}
           </motion.div>
         ) : null}
       </AnimatePresence>
