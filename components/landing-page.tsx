@@ -1,6 +1,13 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useScroll, useTransform, type Variants } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useScroll,
+  useTransform,
+  type Variants,
+} from "framer-motion";
 import {
   ArrowRight,
   CheckCircle2,
@@ -8,7 +15,7 @@ import {
   Menu,
   Send,
   Sparkles,
-  X
+  X,
 } from "lucide-react";
 import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { FormDropdown } from "@/components/form-dropdown";
@@ -16,24 +23,29 @@ import { MagneticButton } from "@/components/magnetic-button";
 import { SectionTitle } from "@/components/section-title";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { TiltCard } from "@/components/tilt-card";
-import { contentByLocale, locales, type Locale, type SiteContent } from "@/lib/site-content";
+import {
+  contentByLocale,
+  locales,
+  type Locale,
+  type SiteContent,
+} from "@/lib/site-content";
 
 const sectionReveal: Variants = {
   hidden: { opacity: 0, y: 28 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.62, ease: [0.22, 1, 0.36, 1] }
-  }
+    transition: { duration: 0.62, ease: [0.22, 1, 0.36, 1] },
+  },
 };
 
 const staggerContainer: Variants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.055
-    }
-  }
+      staggerChildren: 0.055,
+    },
+  },
 };
 
 const cardReveal: Variants = {
@@ -42,8 +54,8 @@ const cardReveal: Variants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.52, ease: [0.22, 1, 0.36, 1] }
-  }
+    transition: { duration: 0.52, ease: [0.22, 1, 0.36, 1] },
+  },
 };
 
 type LandingPageProps = {
@@ -57,7 +69,10 @@ export function LandingPage({ locale }: LandingPageProps) {
     <SmoothScroll>
       <MouseLight />
       <div className="noise-overlay" />
-      <main className="relative min-h-screen overflow-hidden bg-ink-950 text-cream-100" lang={locale}>
+      <main
+        className="relative min-h-screen overflow-hidden bg-ink-950 text-cream-100"
+        lang={locale}
+      >
         <Navigation content={content} />
         <HeroSection content={content} />
         <TrustSection content={content} />
@@ -74,8 +89,16 @@ export function LandingPage({ locale }: LandingPageProps) {
 }
 
 function MouseLight() {
-  const x = useSpring(useMotionValue(-500), { stiffness: 65, damping: 24, mass: 0.45 });
-  const y = useSpring(useMotionValue(-500), { stiffness: 65, damping: 24, mass: 0.45 });
+  const x = useSpring(useMotionValue(-500), {
+    stiffness: 65,
+    damping: 24,
+    mass: 0.45,
+  });
+  const y = useSpring(useMotionValue(-500), {
+    stiffness: 65,
+    damping: 24,
+    mass: 0.45,
+  });
   const enabledRef = useRef(false);
 
   useEffect(() => {
@@ -120,7 +143,7 @@ function Navigation({ content }: { content: SiteContent }) {
     [content.nav.benefits, "benefits"],
     [content.nav.services, "services"],
     [content.nav.process, "process"],
-    [content.nav.contact, "contact"]
+    [content.nav.contact, "contact"],
   ];
 
   useEffect(() => {
@@ -198,13 +221,6 @@ function Navigation({ content }: { content: SiteContent }) {
             >
               <Menu className="size-5" strokeWidth={2} />
             </button>
-            <a
-              href="#contact"
-              className="group inline-flex shrink-0 items-center gap-1.5 rounded-full bg-cream-100 px-3 py-2 text-xs font-semibold text-ink-950 transition hover:bg-white sm:gap-2 sm:px-4 sm:text-sm"
-            >
-              {content.nav.start}
-              <ChevronRight className="size-3.5 transition-transform group-hover:translate-x-0.5 sm:size-4" />
-            </a>
           </div>
         </nav>
       </motion.header>
@@ -228,7 +244,9 @@ function Navigation({ content }: { content: SiteContent }) {
             className="page-px footer-safe-pb absolute inset-y-0 right-0 flex w-[min(100%,21rem)] flex-col border-l border-white/10 bg-ink-900/97 shadow-2xl backdrop-blur-xl"
           >
             <div className="header-safe-pt flex items-center justify-between gap-3 border-b border-white/10 py-4">
-              <span className="font-display text-sm font-semibold text-cream-100">{content.nav.menu}</span>
+              <span className="font-display text-sm font-semibold text-cream-100">
+                {content.nav.menu}
+              </span>
               <button
                 type="button"
                 className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/12 bg-white/[0.06] text-cream-100"
@@ -263,7 +281,10 @@ function HeroSection({ content }: { content: SiteContent }) {
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.35]);
 
   return (
-    <section id="top" className="page-px relative min-h-screen overflow-hidden pb-16 pt-28 sm:pb-20 sm:pt-36 lg:pb-28 lg:pt-40">
+    <section
+      id="top"
+      className="page-px relative min-h-screen overflow-hidden pb-16 pt-28 sm:pb-20 sm:pt-36 lg:pb-28 lg:pt-40"
+    >
       <HeroBackground />
       <motion.div
         style={{ y, opacity }}
@@ -285,16 +306,25 @@ function HeroSection({ content }: { content: SiteContent }) {
           <motion.h1
             initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.82, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.82,
+              delay: 0.06,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="font-display text-[clamp(2rem,9vw,4.35rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-cream-100 sm:text-7xl xl:text-[6.45rem]"
           >
-            {content.hero.titleBefore} <span className="aurora-text">{content.hero.titleHighlight}</span>{" "}
+            {content.hero.titleBefore}{" "}
+            <span className="aurora-text">{content.hero.titleHighlight}</span>{" "}
             {content.hero.titleAfter}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.65,
+              delay: 0.16,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="mt-7 max-w-2xl text-base leading-7 text-cream-100/66 sm:text-lg sm:leading-8 md:text-xl"
           >
             {content.hero.subtitle}
@@ -302,10 +332,16 @@ function HeroSection({ content }: { content: SiteContent }) {
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.65,
+              delay: 0.25,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="mt-9 flex w-full max-w-md flex-col gap-3 sm:max-w-none sm:flex-row"
           >
-            <MagneticButton href="#contact">{content.hero.primaryCta}</MagneticButton>
+            <MagneticButton href="#contact">
+              {content.hero.primaryCta}
+            </MagneticButton>
             <MagneticButton href="#services" variant="secondary">
               {content.hero.secondaryCta}
             </MagneticButton>
@@ -313,7 +349,11 @@ function HeroSection({ content }: { content: SiteContent }) {
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.65,
+              delay: 0.32,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="mt-10 grid max-w-xl grid-cols-3 gap-2 sm:gap-3"
           >
             {content.hero.stats.map(([value, label]) => (
@@ -324,12 +364,29 @@ function HeroSection({ content }: { content: SiteContent }) {
                 <div className="font-display text-xl font-semibold tracking-[-0.04em] text-cream-100 sm:text-2xl">
                   {value}
                 </div>
-                <div className="mt-1 text-[11px] leading-snug text-cream-100/50 sm:text-xs sm:leading-5">{label}</div>
+                <div className="mt-1 text-[11px] leading-snug text-cream-100/50 sm:text-xs sm:leading-5">
+                  {label}
+                </div>
               </div>
             ))}
           </motion.div>
         </div>
-        <HeroDashboard content={content} />
+        <div className="flex flex-col self-stretch">
+          <div className="mb-3 hidden justify-end lg:flex">
+            <motion.a
+              href="#contact"
+              animate={{ scale: [1, 1.13, 1] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="group inline-flex shrink-0 items-center gap-1.5 rounded-full bg-cream-100 px-3 py-2 text-xs font-semibold text-ink-950 transition hover:bg-white sm:gap-2 sm:px-4 sm:text-sm"
+            >
+              {content.nav.start}
+              <ChevronRight className="size-3.5 transition-transform group-hover:translate-x-0.5 sm:size-4" />
+            </motion.a>
+          </div>
+          <div className="flex flex-1 items-center">
+            <HeroDashboard content={content} />
+          </div>
+        </div>
       </motion.div>
     </section>
   );
@@ -344,9 +401,9 @@ function HeroBackground() {
         top: `${(index * 53) % 100}%`,
         size: 2 + (index % 3),
         delay: (index % 6) * 0.4,
-        duration: 9 + (index % 4)
+        duration: 9 + (index % 4),
       })),
-    []
+    [],
   );
 
   return (
@@ -367,9 +424,19 @@ function HeroBackground() {
         <motion.span
           key={particle.id}
           className="absolute rounded-full bg-cyan-glow/60 shadow-[0_0_16px_rgba(124,231,247,0.75)]"
-          style={{ left: particle.left, top: particle.top, width: particle.size, height: particle.size }}
+          style={{
+            left: particle.left,
+            top: particle.top,
+            width: particle.size,
+            height: particle.size,
+          }}
           animate={{ y: [-10, 10, -10], opacity: [0.16, 0.58, 0.16] }}
-          transition={{ duration: particle.duration, delay: particle.delay, repeat: Infinity, ease: "easeInOut" }}
+          transition={{
+            duration: particle.duration,
+            delay: particle.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
         />
       ))}
     </div>
@@ -393,7 +460,9 @@ function HeroDashboard({ content }: { content: SiteContent }) {
         <div className="rounded-[1.35rem] border border-white/10 bg-ink-950/70 p-3 sm:rounded-[2rem] sm:p-4">
           <div className="mb-5 flex items-center justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-cream-100/40">{content.hero.dashboardEyebrow}</p>
+              <p className="text-xs uppercase tracking-[0.24em] text-cream-100/40">
+                {content.hero.dashboardEyebrow}
+              </p>
               <h3 className="mt-1 font-display text-xl font-semibold tracking-[-0.04em] text-cream-100">
                 {content.hero.dashboardTitle}
               </h3>
@@ -404,9 +473,14 @@ function HeroDashboard({ content }: { content: SiteContent }) {
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
             {content.hero.dashboardStats.map(([label, value, helper]) => (
-              <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.045] p-3">
+              <div
+                key={label}
+                className="rounded-2xl border border-white/10 bg-white/[0.045] p-3"
+              >
                 <p className="text-xs text-cream-100/45">{label}</p>
-                <p className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em] text-cream-100">{value}</p>
+                <p className="mt-2 font-display text-2xl font-semibold tracking-[-0.04em] text-cream-100">
+                  {value}
+                </p>
                 <p className="mt-1 text-xs text-cyan-glow/70">{helper}</p>
               </div>
             ))}
@@ -414,7 +488,9 @@ function HeroDashboard({ content }: { content: SiteContent }) {
           <div className="mt-4 grid gap-3 sm:grid-cols-[1.2fr_0.8fr]">
             <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4">
               <div className="mb-4 flex items-center justify-between">
-                <p className="text-sm font-medium text-cream-100/78">{content.hero.acquisition}</p>
+                <p className="text-sm font-medium text-cream-100/78">
+                  {content.hero.acquisition}
+                </p>
                 <p className="text-xs text-cyan-glow">+22.8%</p>
               </div>
               <div className="mb-4 flex min-h-28 items-end gap-1.5 overflow-x-auto pb-1 sm:h-32 sm:gap-2">
@@ -424,14 +500,20 @@ function HeroDashboard({ content }: { content: SiteContent }) {
                     initial={{ height: 8 }}
                     whileInView={{ height: `${height}%` }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: index * 0.035, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{
+                      duration: 0.8,
+                      delay: index * 0.035,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                     className="flex-1 rounded-full bg-gradient-to-t from-teal-700 via-cyan-glow/65 to-cream-100 shadow-[0_0_18px_-8px_rgba(124,231,247,0.8)]"
                   />
                 ))}
               </div>
             </div>
             <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4">
-              <p className="text-sm font-medium text-cream-100/78">{content.hero.aiRouting}</p>
+              <p className="text-sm font-medium text-cream-100/78">
+                {content.hero.aiRouting}
+              </p>
               <div className="relative mt-5 flex aspect-square items-center justify-center rounded-full border border-white/10 bg-ink-900/60">
                 <span className="absolute size-28 rounded-full border border-cyan-glow/25" />
                 <span className="absolute size-20 rounded-full border border-mist-300/25" />
@@ -449,15 +531,21 @@ function HeroDashboard({ content }: { content: SiteContent }) {
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         className="glass-panel absolute -left-4 top-16 hidden w-44 rounded-3xl p-4 shadow-premium sm:block"
       >
-        <p className="text-xs uppercase tracking-[0.2em] text-cyan-glow/75">{content.hero.botFlow}</p>
-        <p className="mt-2 text-sm text-cream-100/72">{content.hero.botFlowDescription}</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-cyan-glow/75">
+          {content.hero.botFlow}
+        </p>
+        <p className="mt-2 text-sm text-cream-100/72">
+          {content.hero.botFlowDescription}
+        </p>
       </motion.div>
       <motion.div
         animate={{ y: [0, -12, 0] }}
         transition={{ duration: 8.5, repeat: Infinity, ease: "easeInOut" }}
         className="glass-panel absolute -right-3 bottom-10 hidden w-48 rounded-3xl p-4 shadow-premium md:block"
       >
-        <p className="text-xs uppercase tracking-[0.2em] text-cyan-glow/75">{content.hero.launchReady}</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-cyan-glow/75">
+          {content.hero.launchReady}
+        </p>
         <div className="mt-3 flex items-center gap-2 text-sm text-cream-100/75">
           <CheckCircle2 className="size-4 text-cyan-glow" />
           {content.hero.ciHealthy}
@@ -480,15 +568,23 @@ function TrustSection({ content }: { content: SiteContent }) {
           className="grid gap-5 md:grid-cols-2 xl:grid-cols-3"
         >
           {content.benefits.map((benefit) => (
-            <TiltCard key={benefit.title} variants={cardReveal} className="group rounded-[1.5rem] p-5 sm:rounded-[2rem] sm:p-6 md:p-7">
+            <TiltCard
+              key={benefit.title}
+              variants={cardReveal}
+              className="group rounded-[1.5rem] p-5 sm:rounded-[2rem] sm:p-6 md:p-7"
+            >
               <div className="mb-8 flex items-center justify-between">
                 <div className="flex size-12 items-center justify-center rounded-2xl bg-cyan-glow/10 text-cyan-glow ring-1 ring-cyan-glow/20 transition group-hover:scale-105 group-hover:bg-cyan-glow/15">
                   <benefit.icon className="size-5" />
                 </div>
                 <ArrowRight className="size-5 text-cream-100/20 transition group-hover:translate-x-1 group-hover:text-cyan-glow" />
               </div>
-              <h3 className="font-display text-xl font-semibold tracking-[-0.03em] text-cream-100">{benefit.title}</h3>
-              <p className="mt-3 leading-7 text-cream-100/58">{benefit.description}</p>
+              <h3 className="font-display text-xl font-semibold tracking-[-0.03em] text-cream-100">
+                {benefit.title}
+              </h3>
+              <p className="mt-3 leading-7 text-cream-100/58">
+                {benefit.description}
+              </p>
             </TiltCard>
           ))}
         </motion.div>
@@ -499,7 +595,10 @@ function TrustSection({ content }: { content: SiteContent }) {
 
 function ServicesSection({ content }: { content: SiteContent }) {
   return (
-    <section id="services" className="page-px relative overflow-hidden py-20 sm:py-32">
+    <section
+      id="services"
+      className="page-px relative overflow-hidden py-20 sm:py-32"
+    >
       <div className="absolute inset-x-0 top-24 h-72 bg-gradient-to-r from-transparent via-teal-700/16 to-transparent blur-3xl" />
       <div className="relative mx-auto max-w-7xl">
         <SectionTitle {...content.sections.services} />
@@ -523,13 +622,17 @@ function ServicesSection({ content }: { content: SiteContent }) {
                   <div className="flex size-13 items-center justify-center rounded-2xl bg-white/[0.06] text-cyan-glow ring-1 ring-white/10">
                     <service.icon className="size-6" />
                   </div>
-                  <span className="font-display text-sm text-cream-100/24">0{index + 1}</span>
+                  <span className="font-display text-sm text-cream-100/24">
+                    0{index + 1}
+                  </span>
                 </div>
                 <div className="mt-auto pt-12 sm:pt-16">
                   <h3 className="font-display text-xl font-semibold tracking-[-0.04em] text-cream-100 sm:text-2xl">
                     {service.title}
                   </h3>
-                  <p className="mt-3 leading-7 text-cream-100/58">{service.description}</p>
+                  <p className="mt-3 leading-7 text-cream-100/58">
+                    {service.description}
+                  </p>
                 </div>
               </div>
             </motion.article>
@@ -551,12 +654,17 @@ function TechnologiesSection({ content }: { content: SiteContent }) {
 
       <div className="mx-auto mt-6 grid max-w-7xl gap-3 md:hidden">
         {content.techGroups.map((group) => (
-          <div key={group.label} className="glass-panel rounded-[1.35rem] p-4 sm:rounded-[2rem] sm:p-5">
+          <div
+            key={group.label}
+            className="glass-panel rounded-[1.35rem] p-4 sm:rounded-[2rem] sm:p-5"
+          >
             <div className="mb-4 flex items-center gap-3">
               <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-cyan-glow/10 text-cyan-glow">
                 <group.icon className="size-5" />
               </div>
-              <h3 className="font-display text-lg font-semibold tracking-[-0.03em] sm:text-xl">{group.label}</h3>
+              <h3 className="font-display text-lg font-semibold tracking-[-0.03em] sm:text-xl">
+                {group.label}
+              </h3>
             </div>
             <div className="flex flex-wrap gap-2">
               {group.items.map((item) => (
@@ -585,7 +693,9 @@ function TechnologiesSection({ content }: { content: SiteContent }) {
                 <div className="flex size-11 items-center justify-center rounded-2xl bg-cyan-glow/10 text-cyan-glow">
                   <group.icon className="size-5" />
                 </div>
-                <h3 className="font-display text-xl font-semibold tracking-[-0.03em]">{group.label}</h3>
+                <h3 className="font-display text-xl font-semibold tracking-[-0.03em]">
+                  {group.label}
+                </h3>
               </div>
               <div className="flex flex-wrap gap-2">
                 {group.items.map((item) => (
@@ -640,7 +750,9 @@ function ProcessSection({ content }: { content: SiteContent }) {
                       </h3>
                     </div>
                   </div>
-                  <p className="leading-8 text-cream-100/58">{step.description}</p>
+                  <p className="leading-8 text-cream-100/58">
+                    {step.description}
+                  </p>
                 </div>
               </motion.div>
             ))}
@@ -667,14 +779,20 @@ function ShowcaseSection({ content }: { content: SiteContent }) {
           >
             <div className="absolute -right-16 -top-16 size-44 rounded-full bg-cyan-glow/12 blur-3xl" />
             <div className="relative">
-              <p className="text-xs uppercase tracking-[0.24em] text-cyan-glow/75">{content.showcasePanel.eyebrow}</p>
+              <p className="text-xs uppercase tracking-[0.24em] text-cyan-glow/75">
+                {content.showcasePanel.eyebrow}
+              </p>
               <h3 className="mt-3 font-display text-2xl font-semibold tracking-[-0.05em] text-cream-100 sm:text-3xl">
                 {content.showcasePanel.title}
               </h3>
-              <p className="mt-4 leading-8 text-cream-100/58">{content.showcasePanel.description}</p>
+              <p className="mt-4 leading-8 text-cream-100/58">
+                {content.showcasePanel.description}
+              </p>
               <div className="mt-8 rounded-[2rem] border border-white/10 bg-ink-950/62 p-4">
                 <div className="mb-4 flex items-center justify-between">
-                  <p className="text-sm text-cream-100/70">{content.showcasePanel.health}</p>
+                  <p className="text-sm text-cream-100/70">
+                    {content.showcasePanel.health}
+                  </p>
                   <span className="rounded-full bg-cyan-glow/10 px-3 py-1 text-xs text-cyan-glow">
                     {content.showcasePanel.optimized}
                   </span>
@@ -690,7 +808,11 @@ function ShowcaseSection({ content }: { content: SiteContent }) {
                           initial={{ width: 0 }}
                           whileInView={{ width: `${78 + index * 4}%` }}
                           viewport={{ once: true }}
-                          transition={{ duration: 0.8, delay: index * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                          transition={{
+                            duration: 0.8,
+                            delay: index * 0.05,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
                           className="h-full rounded-full bg-gradient-to-r from-teal-700 via-cyan-glow to-cream-100"
                         />
                       </div>
@@ -721,13 +843,17 @@ function ShowcaseSection({ content }: { content: SiteContent }) {
                     <div className="font-display text-2xl font-semibold tracking-[-0.04em] text-cream-100">
                       {showcase.metric}
                     </div>
-                    <div className="text-xs text-cream-100/40">{showcase.metricLabel}</div>
+                    <div className="text-xs text-cream-100/40">
+                      {showcase.metricLabel}
+                    </div>
                   </div>
                 </div>
                 <h3 className="font-display text-xl font-semibold tracking-[-0.03em] text-cream-100">
                   {showcase.title}
                 </h3>
-                <p className="mt-3 leading-7 text-cream-100/58">{showcase.description}</p>
+                <p className="mt-3 leading-7 text-cream-100/58">
+                  {showcase.description}
+                </p>
               </motion.article>
             ))}
           </motion.div>
@@ -738,7 +864,9 @@ function ShowcaseSection({ content }: { content: SiteContent }) {
 }
 
 function ContactSection({ content }: { content: SiteContent }) {
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "sending" | "success" | "error"
+  >("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [dropdownReset, setDropdownReset] = useState(0);
 
@@ -756,7 +884,8 @@ function ContactSection({ content }: { content: SiteContent }) {
       nextErrors.email = content.contact.validation.email;
     }
     if (!data.get("projectDescription")) {
-      nextErrors.projectDescription = content.contact.validation.projectDescription;
+      nextErrors.projectDescription =
+        content.contact.validation.projectDescription;
     }
 
     setErrors(nextErrors);
@@ -771,7 +900,7 @@ function ContactSection({ content }: { content: SiteContent }) {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(Object.fromEntries(data.entries()))
+        body: JSON.stringify(Object.fromEntries(data.entries())),
       });
 
       if (!response.ok) {
@@ -816,13 +945,19 @@ function ContactSection({ content }: { content: SiteContent }) {
                 </div>
                 <div>
                   <p className="text-sm text-cream-100/42">{card.title}</p>
-                  <p className="mt-1 font-medium text-cream-100">{card.value}</p>
+                  <p className="mt-1 font-medium text-cream-100">
+                    {card.value}
+                  </p>
                 </div>
               </a>
             ))}
             <div className="glass-panel rounded-[2rem] p-6">
-              <p className="text-sm uppercase tracking-[0.24em] text-cyan-glow/70">{content.contact.trustEyebrow}</p>
-              <p className="mt-4 text-2xl font-semibold tracking-[-0.04em] text-cream-100">{content.contact.trustText}</p>
+              <p className="text-sm uppercase tracking-[0.24em] text-cyan-glow/70">
+                {content.contact.trustEyebrow}
+              </p>
+              <p className="mt-4 text-2xl font-semibold tracking-[-0.04em] text-cream-100">
+                {content.contact.trustText}
+              </p>
             </div>
           </motion.aside>
           <motion.form
@@ -838,10 +973,25 @@ function ContactSection({ content }: { content: SiteContent }) {
             </div>
             <input type="hidden" name="locale" value={content.locale} />
             <div className="relative z-[1] grid gap-5 md:grid-cols-2">
-              <FloatingField name="fullName" label={content.contact.fields.fullName} error={errors.fullName} />
-              <FloatingField name="companyName" label={content.contact.fields.companyName} />
-              <FloatingField name="email" label={content.contact.fields.email} type="email" error={errors.email} />
-              <FloatingField name="phoneTelegram" label={content.contact.fields.phoneTelegram} />
+              <FloatingField
+                name="fullName"
+                label={content.contact.fields.fullName}
+                error={errors.fullName}
+              />
+              <FloatingField
+                name="companyName"
+                label={content.contact.fields.companyName}
+              />
+              <FloatingField
+                name="email"
+                label={content.contact.fields.email}
+                type="email"
+                error={errors.email}
+              />
+              <FloatingField
+                name="phoneTelegram"
+                label={content.contact.fields.phoneTelegram}
+              />
               <FormDropdown
                 key={`servicesInterested-${dropdownReset}`}
                 name="servicesInterested"
@@ -880,7 +1030,9 @@ function ContactSection({ content }: { content: SiteContent }) {
               >
                 <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/45 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                 <span className="relative">
-                  {status === "sending" ? content.contact.sending : content.contact.primaryButton}
+                  {status === "sending"
+                    ? content.contact.sending
+                    : content.contact.primaryButton}
                 </span>
                 <Send className="relative size-4 transition-transform group-hover:translate-x-1" />
               </button>
@@ -903,7 +1055,9 @@ function ContactSection({ content }: { content: SiteContent }) {
                 }`}
               >
                 <CheckCircle2 className="size-5" />
-                {status === "success" ? content.contact.success : content.contact.error}
+                {status === "success"
+                  ? content.contact.success
+                  : content.contact.error}
               </motion.div>
             ) : null}
           </motion.form>
@@ -922,15 +1076,34 @@ type FloatingFieldProps = {
   className?: string;
 };
 
-function FloatingField({ name, label, type = "text", textarea = false, error, className = "" }: FloatingFieldProps) {
+function FloatingField({
+  name,
+  label,
+  type = "text",
+  textarea = false,
+  error,
+  className = "",
+}: FloatingFieldProps) {
   const inputClass = `field-input peer px-4 pb-3 pt-5 text-sm ${error ? "border-red-400/60" : ""}`;
 
   return (
     <div className={`field ${className}`}>
       {textarea ? (
-        <textarea id={name} name={name} placeholder=" " rows={6} className={`${inputClass} resize-none`} />
+        <textarea
+          id={name}
+          name={name}
+          placeholder=" "
+          rows={6}
+          className={`${inputClass} resize-none`}
+        />
       ) : (
-        <input id={name} name={name} type={type} placeholder=" " className={inputClass} />
+        <input
+          id={name}
+          name={name}
+          type={type}
+          placeholder=" "
+          className={inputClass}
+        />
       )}
       <label className="field-label" htmlFor={name}>
         {label}
@@ -965,7 +1138,9 @@ function FinalCtaSection({ content }: { content: SiteContent }) {
         <h2 className="font-display text-[clamp(1.65rem,6vw,3.75rem)] font-semibold leading-[1.05] tracking-[-0.05em] text-cream-100 sm:text-6xl lg:text-7xl">
           {content.finalCta.heading}
         </h2>
-        <p className="mx-auto mt-6 max-w-3xl text-base leading-7 text-cream-100/62 sm:text-lg sm:leading-8">{content.finalCta.subtitle}</p>
+        <p className="mx-auto mt-6 max-w-3xl text-base leading-7 text-cream-100/62 sm:text-lg sm:leading-8">
+          {content.finalCta.subtitle}
+        </p>
         <div className="mt-9 flex justify-center px-1">
           <MagneticButton href="#contact" className="px-8 py-4">
             {content.finalCta.button}
@@ -983,12 +1158,16 @@ function SiteFooter({ content }: { content: SiteContent }) {
     <footer className="page-px footer-safe-pb border-t border-white/[0.08] pt-12">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 sm:flex-row sm:items-start sm:justify-between sm:gap-12">
         <div className="max-w-md">
-          <p className="font-display text-base font-semibold text-cream-100">AdLog</p>
+          <p className="font-display text-base font-semibold text-cream-100">
+            AdLog
+          </p>
           <p className="mt-3 text-sm leading-relaxed text-cream-100/45">
             © {year} AdLog. {content.footer.rights}
           </p>
         </div>
-        <p className="max-w-lg text-sm leading-relaxed text-cream-100/50">{content.footer.note}</p>
+        <p className="max-w-lg text-sm leading-relaxed text-cream-100/50">
+          {content.footer.note}
+        </p>
       </div>
     </footer>
   );
